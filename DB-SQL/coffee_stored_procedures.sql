@@ -1,7 +1,7 @@
 -- ---------------------------------------
 -- Currency Conversion
 -- ---------------------------------------
-DELIMITER \\ 
+DELIMITER // 
 CREATE PROCEDURE convertCurrency (
 				INOUT amount DECIMAL(8,2),
                 IN currency_code VARCHAR(3),
@@ -15,7 +15,7 @@ BEGIN
     WHERE currency_code = from_currency_code AND converted_code = to_currency_code;
     SET newAmount = amount * rate;
 END;
-\\ DELIMITER ;
+// DELIMITER ;
 
 
 
