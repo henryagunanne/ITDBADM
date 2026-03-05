@@ -163,21 +163,27 @@ INSERT INTO store VALUES
 --
 -- notes:
 -- > randomly generated
--- > names are based on a famous food
 -- ----------------------------------------
 INSERT INTO supplier VALUES
-(1, "Nathaniel Isidro", "09826587073", "nathanielisidro@gmail.com", "Phase 3 B F Homes 308 Aguirre Avenue 1700", 24),
-(2, "Leon ", "", "", "", 19),
-(3, "", "", "", "", 19);
+(1, "Nathaniel Isidro", "09826587073", "nathanielisidro@gmail.com", "Phase 3 B F Homes 308 Aguirre Avenue 1700", 70),
+(2, "South Farms", "026965544", "SouthFarms@yahoo.com", "Sitio Lugusangan, Barangay Mantalongon", 39),
+(3, "Leon Arabejo", "09464376275", "Leon_Arabejo@gmail.com", "Cavite Economic Zone, Rosario", 18),
+(4, "Sakahang SK", "020375202", "SakahangSK@yahoo.com", "1244 Sitio Kapehan, Barangay Kanipaan", 62),
+(5, "Felippe Vargas", "09240068561", "f.vargas@gmail.com", "Sitio El Dulo, Barangay Edwards", 61);
 
 
 -- ---------------------------------------
 -- Fill coffee_bean table
 -- ----------------------------------------
 INSERT INTO coffee_bean VALUES 
-(1, "", "", 19),
-(2, "", "", 19),
-(3, "", "", 19);
+(1, "Arabica", "", 70),
+(2, "Sagada Coffee", "", 70),
+(3, "Robusta", "", 39),
+(4, "Liberica", "", 18),
+(5, "Excelsa", "", 18),
+(6, "Daguma Coffee", "", 62),
+(7, "Kulaman Coffee", "", 62),
+(8, "Civet Coffee", "", 61);
 
 
 -- ---------------------------------------
@@ -187,9 +193,9 @@ INSERT INTO coffee_bean VALUES
 -- > randomly generated
 -- ----------------------------------------
 INSERT INTO customer VALUES
-(1, "", "", "", "", "", 19),
-(2, "", "", "", "", "", 19),
-(3, "", "", "", "", "", 19);
+(1, "Julia", "Castro", "juliacastro@gmail.com", "09467259175", "No. 56 Aragon St., SFDM", 28),
+(2, "Sklar", "Arancel", "sky.arancel@gmail.com", "09348592572", "Riverbanks Center, A. Bonifacio Avenue", 20),
+(3, "Ansley", "Chua", "ansleychu@yahoo.com", "09127342953", "Basement, Shangri-La Plaza, EDSA Corner Shaw Boulevard", 17);
 
 
 -- ---------------------------------------
@@ -205,12 +211,12 @@ INSERT INTO currency VALUES
 -- Fill exchange_rate table
 --
 -- notes:
--- > as of March 5
+-- > as of March 5, 2026
 -- ----------------------------------------
-INSERT INTO currency VALUES
-(1, "PHP", "USD", , ""),
-(2, "PHP", "JPY", , ""),
-(3, "USD", "PHP", , ""),
-(4, "USD", "JPY", , ""),
-(5, "JPY", "PHP", , ""),
-(6, "JPY", "USD", , ""); 
+INSERT INTO exchange_rate VALUES
+(1, "PHP", "USD", 0.017, "2026-03-05"),
+(2, "PHP", "JPY", 2.68, "2026-03-05"),
+(3, "USD", "PHP", 58.62, "2026-03-05"),
+(4, "USD", "JPY", 157.05, "2026-03-05"),
+(5, "JPY", "PHP", 0.37, "2026-03-05"),
+(6, "JPY", "USD", 0.0064, "2026-03-05"); 
