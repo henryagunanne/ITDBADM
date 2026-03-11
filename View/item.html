@@ -1,0 +1,117 @@
+<!---
+    ITEM PAGE / SPECIFIC BEAN OR PRODUCT
+
+    NOTE :
+    > all items lead to item.html
+
+    TODO :
+    [ ] connect to db
+    [ ] connect to succeeding pages
+--->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- TODO : don't forget to change this -->
+        <title>Arabica</title>
+        <link rel="stylesheet" href="style.css">
+
+        <!-- fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Notable&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    </head>
+
+    <body>  
+        <!-- NAVIGATION -->
+        <header>
+            <nav>
+                <div class="nav-links">
+                    <a href="home.html">Home</a>
+                    <a href="beans.html">Beans</a>
+                    <a href="">About Us</a>
+                </div>
+
+                <img src="images/logo.png" class="logo" alt="Cool Beans Logo" />
+
+                <div class="nav-icons">
+                    <a href=""><img src="images/search.png" class="icons" /></a>
+                    <a href=""><img src="images/shopping-cart.png" class="icons" /></a>
+                    <a href=""><img src="images/user.png" class="icons" /></a>
+                </div>
+            </nav>
+        </header>
+
+        <!-- BREADCRUMB (hardcoded for now) -->
+        <div class="breadcrumb">
+            <p>Home > Beans > Arabica</p>
+        </div>
+
+        <!-- SPECIFIC PRODUCT -->
+        <div class="product-container">
+            <div class="left-panel">
+                <img src="images/coffee-bag.png" />
+            </div>
+            
+
+            <div class="right-panel">
+                <div class="description">
+                    <h3>Arabica</h3>
+                    <pre>
+Arabica coffee is the world's most popular
+coffee, comprising 60-70% of global production,
+prized for its superior, smooth, and nuanced 
+flavor profile.
+                    </pre>
+                    
+                    <table>
+                        <tr>
+                            <td style="font-weight: bold;">Origin City:</td>
+                            <td>Cavite City</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Local Farmer: </td>
+                            <td>Old McDonald</td>
+                        </tr>
+                    </table>
+
+                    <h4>P250.00</h4>
+                </div>
+
+                <div class="option">
+                    <div class="controls">
+                        <div class="qty-selector">
+                            <button>-</button> <span>1</span> <button>+</button>
+                        </div>
+                        <button class="add-btn">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FOOTER -->
+        <footer>
+            <img src="images/logo.png" />
+            
+            <table>
+                <tr>
+                    <td>
+                        <a href="">About Us</a>
+                    </td>
+                    <td>
+                        <a href="">Terms & Conditions</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="">Contact Us</a>
+                    </td>
+                    <td>
+                        <a href="">How to Order</a>
+                    </td>
+                </tr>
+            </table>
+        </footer>
+    </body>
+</html>

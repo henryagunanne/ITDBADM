@@ -1,0 +1,405 @@
+/*
+    color palette
+
+    beige: #F4E2D0
+    blue: #D2E8FF
+    brown: #5D372A
+    green: #3A5635
+    orange: #EA672D
+*/
+
+
+body {
+    background-color: #F4E2D0;
+    color: #5D372A;
+    font-family: 'Montserrat', sans-serif;
+
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h2 {
+    font-family: 'Notable', sans-serif;
+    font-size: 40px;
+    color: #5D372A;
+    text-align: center;
+}
+
+
+/* NAVIGATION */
+header {
+    width: 95%; 
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 15px;
+    z-index: 1000;
+}
+
+header nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 95%;
+    height: 70px; 
+    border-radius: 70px;
+    background-color:#3A5635;
+    padding: 0 40px;
+}
+
+.nav-links, .nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 30px; 
+    flex: 1;
+}
+
+.nav-icons {
+    justify-content: flex-end; 
+}
+
+header a {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.logo { 
+    height: 45px; 
+}
+
+.icons { 
+    height: 20px; 
+}
+
+
+/* TOP PART */
+.top-container {
+    width: 100%;
+    height: 600px;
+    background-image: url("images/top.png");
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+
+    margin-bottom: 30px;
+}
+
+.top {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.top img {
+    width: 200px;
+}
+
+h1 {
+    font-size: 80px;
+    line-height: 1;
+    margin: 0;
+}
+
+.top-container p {
+    font-size: 30px;
+}
+
+
+/* COFFEE BEAN SELECTION */
+.selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 80px 0;
+}
+
+h4 {
+    font-weight: 800;
+    font-size: larger;
+    /* margin: 0; */
+}
+
+.product-row {
+    width: 90%;
+    max-width: 1000px;
+    margin-bottom: 100px;
+
+    background-image: url("images/shelf.png");
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    background-size: 100% 60px;
+
+    padding-bottom: 10px;
+}
+
+.product-items {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.bean-item {
+    text-align: center;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bean-item a {
+    text-decoration: none;
+
+    color:#5D372A;
+}
+
+.bean-item img { 
+    height: 180px; 
+    width: auto;
+    margin-bottom: -30px;
+
+    filter: drop-shadow(0 0 4px black);
+}
+
+.bean-item p {
+    margin: 5px 0;
+    font-weight: 600;
+}
+
+/* CONTROLS */
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.qty-selector {
+    display: flex;
+    align-items: center;
+
+    border: solid 1px;
+    border-color: #5D372A;
+    border-radius: 20px;
+    padding: 2px 10px;
+}
+
+.qty-selector button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.add-btn {
+    background-color: #5D372A;
+    color: #F4E2D0;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 18px;
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+.add-btn:hover {
+    background-color: #333;
+}
+
+
+/* FARMER FACT */
+.fact {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    width: 90%;
+    max-width: 1000px;
+    background-color: #D2E8FF;
+    border-radius: 30px;
+    overflow: hidden;
+    margin: 60px 0;
+}
+
+.fact img {
+    width: 50%;
+    object-fit: cover;
+}
+
+.info {
+    padding: 40px;
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info h3 {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+
+/* TESTIMONIALS */
+.testimonials-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 60px 0;
+    width: 100%;
+}
+
+.testimonials {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px;
+}
+
+.testimony {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    flex: 1;
+    min-width: 250px;
+    max-width: 350px;
+    border: solid 3px #3A5635;
+    border-radius: 40px;
+    background-color: rgba(255,255,255,0.2);
+}
+
+/* FOOTER */
+footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    min-height: 250px;
+    background-color: #D2E8FF;
+    margin-top: 50px;
+    padding: 40px 0;
+}
+
+footer img {
+    height: 120px;
+}
+
+footer a {
+    text-decoration: none;
+    color: #5D372A;
+    font-weight: 500;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 20px;
+}
+
+
+
+/* BREADCRUMB */
+.breadcrumb {
+    margin-top: 80px;
+
+    font-size: 15px;
+
+    display: flex;
+    align-self: flex-start;
+    padding: 0 0 0 35px;
+}
+
+
+/* MAIN CONTENT (BEANS) */
+.main-container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+
+    gap: 20px;       
+    padding: 20px;
+}
+
+
+/* SIDENAV */
+sidenav {
+    display: flex;
+    flex-direction: column;
+    
+    padding: 30px;
+    gap: 15px;
+}
+
+/* VERTICAL DIVIDER */
+.vertical-divider {
+    width: 2px;          
+    background-color: #5D372A;
+    align-self: stretch;      
+}
+
+/* APPLY BUTTON */
+.apply-btn {
+    width: 150px;
+
+    background-color: #5D372A;
+    color: #F4E2D0;
+
+    border: none;
+    border-radius: 20px;
+    padding: 8px 18px;
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+/* PRODUCT CONTAINER */
+.product-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15%;
+}
+
+/* DESCRIPTION STUFF */
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 3%;
+    padding: 10px;
+}
+
+.description h3 {
+    font-size: 50px;
+    font-family: Notable;
+}
+
+.description table {
+    border: none;
+    border-collapse: collapse;
+}
+
+.description table th,td {
+    padding-right: 10px;
+}
+
+
+.left-panel img {
+    height: 400px;
+    width: 300px;
+}

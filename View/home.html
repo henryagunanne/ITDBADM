@@ -1,0 +1,223 @@
+<!---
+    HOME PAGE
+
+    NOTE :
+    > all items lead to item.html
+
+    TODO :
+    [ ] connect to db
+    [ ] connect to succeeding pages
+--->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home Page</title>
+        <link rel="stylesheet" href="style.css">
+
+        <!-- fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Notable&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <!-- NAVIGATION -->
+        <header>
+            <nav>
+                <div class="nav-links">
+                    <a href="">Home</a>
+                    <a href="beans.html">Beans</a>
+                    <a href="">About Us</a>
+                </div>
+
+                <img src="images/logo.png" class="logo" alt="Cool Beans Logo" />
+
+                <div class="nav-icons">
+                    <a href=""><img src="images/search.png" class="icons" /></a>
+                    <a href=""><img src="images/shopping-cart.png" class="icons" /></a>
+                    <a href=""><img src="images/user.png" class="icons" /></a>
+                </div>
+            </nav>
+        </header>
+
+        <!-- TOP PART -->
+        <section class="top-container">
+            <div class="top">
+                <img src="images/coffee.png" />
+                <h1 style="font-family: Notable;">Cool Ka<br>Muna!</h1>
+            </div>
+
+            <p>Coffee with a cause.</p>
+        </section>
+
+
+        <!-- COFFEE BEAN SELECTION -->
+        <!-- NOTE : coffee bean items should come from the database -->
+        <section class="selection">
+            <h2>Coffee Beans</h2>
+            
+            <div class="product-row">
+                <div class="product-items">
+                    <div class="bean-item">
+                        <a href="item.html">
+                            <h4>Arabica</h4>
+                            <p>P250.00</p>
+                            <img src="images/coffee-bag.png">
+                        </a>
+                        
+                        <div class="controls">
+                            <div class="qty-selector">
+                                <button>-</button> <span>1</span> <button>+</button>
+                            </div>
+                            <button class="add-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="bean-item" onclick="">
+                        <a href="item.html">
+                            <h4>Liberica</h4>
+                            <p>P250.00</p>
+                            <img src="images/coffee-bag.png">
+                        </a>
+                        
+                        <div class="controls">
+                            <div class="qty-selector">
+                                <button>-</button> <span>1</span> <button>+</button>
+                            </div>
+                            <button class="add-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="bean-item" onclick="">
+                        <a href="item.html">
+                            <h4>Robusta</h4>
+                            <p>P250.00</p>
+                            <img src="images/coffee-bag.png">
+                        </a>
+                        
+                        <div class="controls">
+                            <div class="qty-selector">
+                                <button>-</button> <span>1</span> <button>+</button>
+                            </div>
+                            <button class="add-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-row">
+                <div class="product-items">
+                    <div class="bean-item">
+                        <a href="item.html">
+                            <h4>Arabica</h4>
+                            <p>P250.00</p>
+                            <img src="images/coffee-bag.png">
+                        </a>
+                        
+                        <div class="controls">
+                            <div class="qty-selector">
+                                <button>-</button> <span>1</span> <button>+</button>
+                            </div>
+                            <button class="add-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="bean-item" onclick="">
+                        <a href="item.html">
+                            <h4>Liberica</h4>
+                            <p>P250.00</p>
+                            <img src="images/coffee-bag.png">
+                        </a>
+                        
+                        <div class="controls">
+                            <div class="qty-selector">
+                                <button>-</button> <span>1</span> <button>+</button>
+                            </div>
+                            <button class="add-btn">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="bean-item" onclick="">
+                        <a href="item.html">
+                            <h4>Robusta</h4>
+                            <p>P250.00</p>
+                            <img src="images/coffee-bag.png">
+                        </a>
+                        
+                        <div class="controls">
+                            <div class="qty-selector">
+                                <button>-</button> <span>1</span> <button>+</button>
+                            </div>
+                            <button class="add-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="beans.html" style="color: #EA672D">See More</a>
+        </section>
+
+
+        <!-- FARMER FACT -->
+        <section class="fact">
+            <img src="images/coffee-farmer.jpeg" />
+            <div class="info">
+                <h3>Every purchase helps a<br>local farmer!</h3>
+                <p>Some fact about farmers</p>
+            </div>
+        </section>
+
+
+        <!-- TESTIMONIALS -->
+        <section class="testimonials-container">
+            <h2>Hear From Our Customers</h2>
+
+            <div class="testimonials">
+                <div class="testimony">
+                    <h4>Title</h4>
+                    <p>This is where the feedback would go.</p>
+                    <h5>- Name</h5>
+                </div>
+
+                <div class="testimony">
+                    <h4>Title</h4>
+                    <p>This is where the feedback would go.</p>
+                    <h5>- Name</h5>
+                </div>
+
+                <div class="testimony">
+                    <h4>Title</h4>
+                    <p>This is where the feedback would go.</p>
+                    <h5>- Name</h5>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- FOOTER -->
+        <footer>
+            <img src="images/logo.png" />
+            
+            <table>
+                <tr>
+                    <td>
+                        <a href="">About Us</a>
+                    </td>
+                    <td>
+                        <a href="">Terms & Conditions</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="">Contact Us</a>
+                    </td>
+                    <td>
+                        <a href="">How to Order</a>
+                    </td>
+                </tr>
+            </table>
+        </footer>
+    </body>
+</html>
