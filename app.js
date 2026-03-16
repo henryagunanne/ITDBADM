@@ -47,6 +47,15 @@ server.get('/', function(req, resp){
     });
 });
 
+server.get('/view/beans', function(req, resp){
+    resp.render('beans',{
+        layout: 'index',
+        title: 'Shop for Beans | Cool Beans',
+        beans: sampleBeans,
+        location: 'Home > Beans'
+    });
+});
+
 // Start Server
 const port = process.env.PORT || 9090;
 server.listen(port, function(){
