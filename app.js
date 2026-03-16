@@ -26,14 +26,14 @@ server.use(express.static('public'));
 
 const sampleBeans = [
   [
-    { name: "Arabica", price: 450 },
-    { name: "Robusta", price: 350 },
-    { name: "Liberica", price: 500 }
+    { id: 0, name: "Arabica", price: 450 },
+    { id: 1, name: "Robusta", price: 350 },
+    { id: 2, name: "Liberica", price: 500 }
   ],
   [
-    { name: "Excelsa", price: 480 },
-    { name: "Colombian Supremo", price: 550 },
-    { name: "Ethiopian Yirgacheffe", price: 600 }
+    { id: 3, name: "Excelsa", price: 480 },
+    { id: 4, name: "Colombian Supremo", price: 550 },
+    { id: 5, name: "Ethiopian Yirgacheffe", price: 600 }
   ]
 ];
 
@@ -53,6 +53,21 @@ server.get('/view/beans', function(req, resp){
         title: 'Shop for Beans | Cool Beans',
         beans: sampleBeans,
         location: 'Home > Beans'
+    });
+});
+
+server.get('/view/beans/:id', function(req, resp){
+    const id = parseInt(req.params.id);
+
+    const bean = sampleBeans
+        .flat()
+        .find(b => b.id === id);
+    
+    resp.render('item',{
+        layout: 'index',
+        title: bean.name + ' Beans | Cool Beans',
+        selected: bean,
+        location: 'Home > Beans > ' + bean.name
     });
 });
 
