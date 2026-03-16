@@ -25,30 +25,16 @@ server.engine('hbs', hbs.engine);
 server.use(express.static('public'));
 
 const sampleBeans = [
-  {
-    name: "Arabica",
-    price: 450.0
-  },
-  {
-    name: "Robusta",
-    price: 350.0
-  },
-  {
-    name: "Liberica",
-    price: 500.0
-  },
-  {
-    name: "Excelsa",
-    price: 480.0
-  },
-  {
-    name: "Colombian Supremo",
-    price: 550.0
-  },
-  {
-    name: "Ethiopian Yirgacheffe",
-    price: 600.0
-  }
+  [
+    { name: "Arabica", price: 450 },
+    { name: "Robusta", price: 350 },
+    { name: "Liberica", price: 500 }
+  ],
+  [
+    { name: "Excelsa", price: 480 },
+    { name: "Colombian Supremo", price: 550 },
+    { name: "Ethiopian Yirgacheffe", price: 600 }
+  ]
 ];
 
 server.get('/', function(req, resp){

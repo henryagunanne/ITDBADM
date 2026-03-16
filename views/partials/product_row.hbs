@@ -1,7 +1,8 @@
 <!-- product-row.hbs -->
+{{#each beans}}
 <div class="product-row">
     <div class="product-items">
-        {{#each beans}}
+        {{#each this}}
             <div class="bean-item" onclick="window.location.href='/view/beans/{{_id}}'">
                 <h4>{{name}}</h4>
                 <p>PHP {{price}}</p>
@@ -17,3 +18,4 @@
         {{/each}}
     </div>
 </div>
+{{/each}}
