@@ -24,10 +24,40 @@ server.engine('hbs', hbs.engine);
 // Serve static files from public directory
 server.use(express.static('public'));
 
+const sampleBeans = [
+  {
+    name: "Arabica",
+    price: 450.0
+  },
+  {
+    name: "Robusta",
+    price: 350.0
+  },
+  {
+    name: "Liberica",
+    price: 500.0
+  },
+  {
+    name: "Excelsa",
+    price: 480.0
+  },
+  {
+    name: "Colombian Supremo",
+    price: 550.0
+  },
+  {
+    name: "Ethiopian Yirgacheffe",
+    price: 600.0
+  }
+];
+
 server.get('/', function(req, resp){
     resp.render('home',{
         layout: 'index',
-        title: 'Home | Cool Beans'
+        title: 'Home | Cool Beans',
+        beans: sampleBeans,
+        ffact: {title: "Every purchase helps a local farmer!", description: "Some fact about farmers"},
+        testimonials: [{title: "Ang sarap!", description: "Super!", author: "J. Daguiso"}, {title: "Ang sarap!", description: "Super!", author: "H. Agunanne"}, {title: "Ang sarap!", description: "Super!", author: "M. Andaya"}]
     });
 });
 

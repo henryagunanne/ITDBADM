@@ -1,0 +1,19 @@
+<!-- product-row.hbs -->
+<div class="product-row">
+    <div class="product-items">
+        {{#each beans}}
+            <div class="bean-item" onclick="window.location.href='/view/beans/{{_id}}'">
+                <h4>{{name}}</h4>
+                <p>PHP {{price}}</p>
+                <img src="/common/coffee-bag.png">
+                
+                <div class="controls">
+                    <div class="qty-selector">
+                        <button>-</button> <span>1</span> <button>+</button>
+                    </div>
+                    <button class="add-btn">Add to Cart</button>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>
