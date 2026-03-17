@@ -1,0 +1,54 @@
+<div class="order-summary">
+    <h5>Order Summary</h5>
+
+    <div class="orders">
+        {{#each items}}
+        <div class="item">
+            <img src="{{bean.bean_image_path}}" class="cart-item-img" />
+
+            <div class="cart-info">
+                <h5>{{bean.bean_name}}</h5>
+                <p class="price">PHP {{bean.price_per_kg}}</p>
+
+                <div class="qty-row">
+                    <span>Quantity:</span>
+                    <div>{{quantity}}</div>
+                </div>
+
+                <p class="item-total">
+                    Total: PHP {{multiply bean.price_per_kg quantity}}
+                </p>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+    <hr style="color: #5D372A;">
+
+    <div class="payment-summary">
+        <h5>Payment Summary</h5>
+
+        <table>
+            <tr>
+                <td>Subtotal:</td>
+                <td style="text-align: right;">
+                    PHP {{total_price}}
+                </td>
+            </tr>
+
+            <tr>
+                <td>Estimated Shipping:</td>
+                <td style="text-align: right;">
+                    PHP 0.00
+                </td>
+            </tr>
+
+            <tr>
+                <td style="font-weight: bold;">Grand Total:</td>
+                <td style="text-align: right; font-weight: bold;">
+                    PHP {{total_price}}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

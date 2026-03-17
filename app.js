@@ -151,7 +151,7 @@ server.get('/view/beans', function(req, resp){
         layout: 'index',
         title: 'Shop for Beans | Cool Beans',
         beans: sampleBeans,
-        items: sampleCart,
+        items: sampleCart.items,
         total_price: sampleCart.total_price,
         location: 'Home > Beans'
     });
@@ -172,9 +172,20 @@ server.get('/view/beans/:id', function(req, resp){
         title: bean.bean_name + ' Beans | Cool Beans',
         selected: bean,
         beans: sampleBeans,
-        items: sampleCart,
+        items: sampleCart.items,
         total_price: sampleCart.total_price,
         location: 'Home > Beans > ' + bean.bean_name
+    });
+});
+
+server.get('/checkout', function(req, resp){
+    resp.render('checkout',{
+        layout: 'index',
+        title: 'Checkout | Cool Beans',
+        beans: sampleBeans,
+        items: sampleCart.items,
+        total_price: sampleCart.total_price,
+        location: 'Home > Checkout'
     });
 });
 
