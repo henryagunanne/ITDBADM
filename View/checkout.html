@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Checkout</title>
+        <link rel="stylesheet" href="style.css">
+
+        <!-- fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Notable&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <!-- NAVIGATION -->
+        <header>
+            <nav>
+                <div class="nav-links">
+                    <a href="home.html">Home</a>
+                    <a href="beans.html">Beans</a>
+                    <a href="">About Us</a>
+                </div>
+
+                <img src="images/logo.png" class="logo" alt="Cool Beans Logo" />
+
+                <div class="nav-icons">
+                    <a href=""><img src="images/search.png" class="icons" /></a>
+                    <a href=""><img src="images/shopping-cart.png" class="icons" /></a>
+                    <a href=""><img src="images/user.png" class="icons" /></a>
+                </div>
+            </nav>
+        </header>
+
+        <!-- BREADCRUMB (hardcoded for now) -->
+        <div class="breadcrumb">
+            <p>Home > Checkout</p>
+        </div>
+
+        <!-- TITLE -->
+        <h2>Checkout</h2>
+
+        <div class="checkout-container">
+            <form method="POST" action="">
+                <div class="contact-info">
+                    <div class="email">
+                        <label>Contact</label>
+                        <input type="text" name="email-add" placeholder="Email Address">
+                    </div>
+
+                    <div class="shipping-address">
+                        <label>Shipping Address</label>
+                        <select name="country"> <!-- NOTE : ideally comes from the db -->
+                            <option value="Japan">Japan</option>
+                            <option value="Philippines">Philippines</option>
+                            <option value="USA">United State of America</option>
+                        </select>
+                        <div class="name">
+                            <input type="text" name="first-name" placeholder="First Name" size="35">
+                            <input type="text" name="last-name" placeholder="Last Name" size="35">
+                        </div>
+                        <input type="text" name="address" placeholder="Address">
+                        <div class="address-line2">
+                            <input type="number" name="postal-code" placeholder="Postal Code" style="width: 250px;">
+                            <select name="city" style="width: 260px;"> <!-- NOTE : ideally comes from the db -->
+                                <option value="Manila">Manila</option>
+                                <option value="Laguna">Laguna</option>
+                                <option value="Quezon">Quezon</option>
+                            </select>
+                        </div>
+                        <input type="number" name="contact-number" placeholder="Contact Number">
+                    </div>
+
+                    <div class="payment">
+                        <div class="payment-method">
+                            <label>Payment Method</label>
+                            <table>
+                                <tr><td><input type="radio" name="payment-method" value="COD">Cash on Delivery</td></tr>
+                                <tr><td><input type="radio" name="payment-method" value="card">Credit / Debit Card</td></tr>
+                                <tr><td><input type="radio" name="payment-method" value="e-wallet">E-wallet</td></tr>
+                            </table>
+                        </div>
+
+                        <div class="payment-details">
+                            <label>Payment Details</label>
+                            <table>
+                                <tr>
+                                    <td><input type="number" name="card-number" placeholder="Card Number"></td>
+                                    <td><input type="text" name="expiry" placeholder="MM/YY"></td>
+                                </tr>
+                                 <tr>
+                                    <td><input type="text" name="card-holder" placeholder="Card Holder Name"></td>
+                                    <td><input type="number" name="card-verification" placeholder="CVV"></td>
+                                </tr>
+                            </table>
+                            
+                        </div>
+                    </div>
+                    <input type="submit" value="Place Order" class="apply-btn" style="align-self: center;">
+                </div>
+            </form>
+
+            <div class="vertical-divider"></div>
+            
+            <div class="order-summary">
+                <h5>Order Summary</h5>
+
+                <div class="orders">
+                    <!-- NOTE : hardcoded / has placeholder -->
+                    <div class="item">
+                        <img src="images/coffee-bag.png" class="cart-item-img" />
+                        <div class="cart-info">
+                            <h5>Arabica</h5>
+                            <p class="price">P250.00</p>
+                            <div class="qty-row">
+                                <span>Quantity:</span>
+                            <div>
+                                1
+                            </div>
+                        </div>
+                        <p class="item-total">Total: P250.00</p>
+                        </div>
+                    </div>
+                </div> 
+
+                <hr style="color: #5D372A;">
+
+                <!-- NOTE : hardcoded / has placeholder -->
+                <div class="payment-summary">
+                    <h5>Payment Summary</h5>
+
+                    <table>
+                        <tr>
+                            <td>Subtotal:</td>
+                            <td style="text-align: right;">Y 671.63</td>
+                        </tr>
+                        <tr>
+                            <td>Estimated Shipping:</td>
+                            <td style="text-align: right;">Y 6,350.00</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Grand Total:</td>
+                            <td style="text-align: right; font-weight: bold;">Y 7,021.63</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            
+        </div>
+
+
+
+
+        <!-- FOOTER -->
+        <footer>
+            <img src="images/logo.png" />
+            
+            <table>
+                <tr>
+                    <td>
+                        <a href="">About Us</a>
+                    </td>
+                    <td>
+                        <a href="">Terms & Conditions</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="">Contact Us</a>
+                    </td>
+                    <td>
+                        <a href="">How to Order</a>
+                    </td>
+                </tr>
+            </table>
+        </footer>
+    </body>
+</html>
