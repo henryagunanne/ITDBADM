@@ -122,11 +122,15 @@ server.get('/view/beans/:id', function(req, resp){
     const bean = sampleBeans
         .flat()
         .find(b => b.bean_id === id);
+
+    // for debugging
+    console.log(bean);
     
     resp.render('item',{
         layout: 'index',
         title: bean.bean_name + ' Beans | Cool Beans',
         selected: bean,
+        beans: sampleBeans,
         location: 'Home > Beans > ' + bean.bean_name
     });
 });
