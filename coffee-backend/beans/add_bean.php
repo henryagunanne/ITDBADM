@@ -13,7 +13,6 @@
         $supplier = $_POST['supplier'];
         $description = $_POST['description'] ? $_POST['description'] : null;
 
-        // Get the province id from the province table
         $query = "INSERT INTO coffee_bean ('bean_id', 'bean_name', 'variety', 'origin_province_id', 'roast_level', 'price_per_kg', 'supplier_id', 'description')
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt1 = $conn->prepare($query);
