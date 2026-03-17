@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `cool_beans`.`coffee_bean` (
   `roast_level` ENUM('LIGHT', 'MEDIUM', 'MEDIUM_DARK', 'DARK') NOT NULL,
   `price_per_kg` DECIMAL(10,2) NOT NULL,
   `supplier_id` INT NOT NULL,
-  `description` TEXT,
+  `description` TEXT NULL,
   PRIMARY KEY (`bean_id`),
   UNIQUE INDEX `bean_id_UNIQUE` (`bean_id` ASC) VISIBLE,
   INDEX `fk_coffee_bean_province1_idx` (`origin_province_id` ASC) VISIBLE,
@@ -424,10 +424,7 @@ ENGINE = InnoDB;
 
 CREATE TABLE `cool_beans`.`users` (
     `user_id` INT AUTO_INCREMENT PRIMARY KEY,
-    `first_name` VARCHAR(50) NULL,
-    `last_name` VARCHAR(50) NULL,
     `username` VARCHAR(50) UNIQUE NOT NULL,
-    `email` VARCHAR(50) UNIQUE NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     `role` ENUM('ADMIN', 'STAFF', 'CUSTOMER') NOT NULL DEFAULT 'CUSTOMER',
     `linked_customer_id` INT NULL,
@@ -447,6 +444,21 @@ CREATE TABLE `cool_beans`.`users` (
       ON DELETE NO ACTION
       ON UPDATE NO ACTION
 ) ENGINE=InnoDB;
+
+
+-- ====================================
+-- Deleted Coffee bean log Table
+-- ====================================
+CREATE TABLE `cool_beans`.`coffee_bean_delete_log` (
+    `log_id` INT AUTO_INCREMENT PRIMARY KEY,
+    `bean_id` INT,
+    `bean_name` VARCHAR(100),
+    `variety` VARCHAR(100),
+    `origin_province_id` INT,
+    `roast_level` ENUM('LIGHT', 'MEDIUM', 'MEDIUM_DARK', 'DARK') NOT NULL,
+    `price_per_kg` DECIMAL(10,2) NOT NULL,
+    `deleted_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+)ENGINE=InnoDB;
 
 
 

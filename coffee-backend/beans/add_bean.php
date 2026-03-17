@@ -1,7 +1,7 @@
 <?php
     session_start(); 
 
-    include("config/db-connect.php");
+    include("../config/db-connect.php");
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $bean_id = $_POST['bean_id'];
