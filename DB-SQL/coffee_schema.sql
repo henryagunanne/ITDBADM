@@ -8,19 +8,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema coffee_db
+-- Schema cool_beans
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema coffee_db
+-- Schema cool_beans
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `coffee_db` DEFAULT CHARACTER SET utf8 ;
-USE `coffee_db` ;
+CREATE SCHEMA IF NOT EXISTS `cool_beans` DEFAULT CHARACTER SET utf8 ;
+USE `cool_beans` ;
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`region`
+-- Table `cool_beans`.`region`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`region` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`region` (
   `region_id` INT NOT NULL,
   `region_name` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`region_id`),
@@ -28,9 +28,9 @@ CREATE TABLE IF NOT EXISTS `coffee_db`.`region` (
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`province`
+-- Table `cool_beans`.`province`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`province` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`province` (
   `province_id` INT NOT NULL,
   `province_name` VARCHAR(45) NOT NULL,
   `region_id` INT NOT NULL,
@@ -39,74 +39,84 @@ CREATE TABLE IF NOT EXISTS `coffee_db`.`province` (
   INDEX `fk_province_region_idx` (`region_id` ASC) VISIBLE,
   CONSTRAINT `fk_province_region`
     FOREIGN KEY (`region_id`)
-    REFERENCES `coffee_db`.`region` (`region_id`)
+    REFERENCES `cool_beans`.`region` (`region_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`city`
+-- Table `cool_beans`.`city`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`city` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`city` (
   `city_id` INT NOT NULL,
   `city_name` VARCHAR(45) NOT NULL,
-  `region_id` INT NOT NULL,
+  `province_id` INT NOT NULL,
   PRIMARY KEY (`city_id`),
   UNIQUE INDEX `city_id_UNIQUE` (`city_id` ASC) VISIBLE,
-  INDEX `fk_city_region_idx` (`region_id` ASC) VISIBLE,
-  CONSTRAINT `fk_city_region`
-    FOREIGN KEY (`region_id`)
-    REFERENCES `coffee_db`.`region` (`region_id`)
+  INDEX `fk_city_province_idx` (`province_id` ASC) VISIBLE,
+  CONSTRAINT `fk_city_province`
+    FOREIGN KEY (`province_id`)
+    REFERENCES `cool_beans`.`province` (`province_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`supplier`
+-- Table `cool_beans`.`supplier`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`supplier` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`supplier` (
   `supplier_id` INT NOT NULL,
   `supplier_name` VARCHAR(100) NOT NULL,
   `contact_number` VARCHAR(45) NOT NULL,
   `email` VARCHAR(100) NOT NULL,
   `address` VARCHAR(255) NULL,
-  `province_id` INT NOT NULL,
+  `city_id` INT NOT NULL,
   PRIMARY KEY (`supplier_id`),
   UNIQUE INDEX `supplier_id_UNIQUE` (`supplier_id` ASC) VISIBLE,
-  INDEX `fk_supplier_province1_idx` (`province_id` ASC) VISIBLE,
-  CONSTRAINT `fk_supplier_province1`
-    FOREIGN KEY (`province_id`)
-    REFERENCES `coffee_db`.`province` (`province_id`)
+  INDEX `fk_supplier_city1_idx` (`city_id` ASC) VISIBLE,
+  CONSTRAINT `fk_supplier_city1`
+    FOREIGN KEY (`city_id`)
+    REFERENCES `cool_beans`.`city` (`city_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`coffee_bean`
+-- Table `cool_beans`.`coffee_bean`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`coffee_bean` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`coffee_bean` (
   `bean_id` INT NOT NULL,
   `bean_name` VARCHAR(100) NOT NULL,
   `variety` VARCHAR(100) NULL,
   `origin_province_id` INT NOT NULL,
+  `roast_level` ENUM('LIGHT', 'MEDIUM', 'MEDIUM_DARK', 'DARK') NOT NULL,
+  `price_per_kg` DECIMAL(10,2) NOT NULL,
+  `supplier_id` INT NOT NULL,
+  `description` TEXT,
   PRIMARY KEY (`bean_id`),
   UNIQUE INDEX `bean_id_UNIQUE` (`bean_id` ASC) VISIBLE,
   INDEX `fk_coffee_bean_province1_idx` (`origin_province_id` ASC) VISIBLE,
+  INDEX `fk_coffee_bean_supplier_idx` (`supplier_id` ASC) VISIBLE,
   CONSTRAINT `fk_coffee_bean_province1`
     FOREIGN KEY (`origin_province_id`)
-    REFERENCES `coffee_db`.`province` (`province_id`)
+    REFERENCES `cool_beans`.`province` (`province_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_coffee_bean_supplier`
+    FOREIGN KEY (`supplier_id`) 
+    REFERENCES `cool_beans`.`supplier`(`supplier_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`store`
+-- Table `cool_beans`.`store`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`store` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`store` (
   `store_id` INT NOT NULL,
   `store_name` VARCHAR(100) NOT NULL,
   `contact_number` VARCHAR(45) NULL,
@@ -117,16 +127,16 @@ CREATE TABLE IF NOT EXISTS `coffee_db`.`store` (
   INDEX `fk_store_city1_idx` (`city_id` ASC) VISIBLE,
   CONSTRAINT `fk_store_city1`
     FOREIGN KEY (`city_id`)
-    REFERENCES `coffee_db`.`city` (`city_id`)
+    REFERENCES `cool_beans`.`city` (`city_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`customer`
+-- Table `cool_beans`.`customer`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`customer` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`customer` (
   `customer_id` INT NOT NULL,
   `first_name` VARCHAR(100) NOT NULL,
   `last_name` VARCHAR(100) NULL,
@@ -139,16 +149,16 @@ CREATE TABLE IF NOT EXISTS `coffee_db`.`customer` (
   INDEX `fk_customer_city1_idx` (`city_id` ASC) VISIBLE,
   CONSTRAINT `fk_customer_city1`
     FOREIGN KEY (`city_id`)
-    REFERENCES `coffee_db`.`city` (`city_id`)
+    REFERENCES `cool_beans`.`city` (`city_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`currency`
+-- Table `cool_beans`.`currency`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`currency` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`currency` (
   `currency_code` VARCHAR(5) NOT NULL,
   `currency_name` VARCHAR(45) NULL,
   `symbol` VARCHAR(5) NULL,
@@ -158,9 +168,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`exchange_rate`
+-- Table `cool_beans`.`exchange_rate`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`exchange_rate` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`exchange_rate` (
   `rate_id` INT NOT NULL AUTO_INCREMENT,
   `from_currency_code` VARCHAR(5) NOT NULL,
   `to_currency_code` VARCHAR(5) NOT NULL,
@@ -171,21 +181,21 @@ CREATE TABLE IF NOT EXISTS `coffee_db`.`exchange_rate` (
   INDEX `fk_exchange_rate_currency2_idx` (`to_currency_code` ASC) VISIBLE,
   CONSTRAINT `fk_exchange_rate_currency1`
     FOREIGN KEY (`from_currency_code`)
-    REFERENCES `coffee_db`.`currency` (`currency_code`)
+    REFERENCES `cool_beans`.`currency` (`currency_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_exchange_rate_currency2`
     FOREIGN KEY (`to_currency_code`)
-    REFERENCES `coffee_db`.`currency` (`currency_code`)
+    REFERENCES `cool_beans`.`currency` (`currency_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`sale`
+-- Table `cool_beans`.`sale`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`sale` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`sale` (
   `sale_id` INT NOT NULL,
   `store_id` INT NOT NULL,
   `customer_id` INT NOT NULL,
@@ -198,77 +208,77 @@ CREATE TABLE IF NOT EXISTS `coffee_db`.`sale` (
   INDEX `fk_sales_currency1_idx` (`currency_code` ASC) VISIBLE,
   CONSTRAINT `fk_sales_store1`
     FOREIGN KEY (`store_id`)
-    REFERENCES `coffee_db`.`store` (`store_id`)
+    REFERENCES `cool_beans`.`store` (`store_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_sales_customer1`
     FOREIGN KEY (`customer_id`)
-    REFERENCES `coffee_db`.`customer` (`customer_id`)
+    REFERENCES `cool_beans`.`customer` (`customer_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_sales_currency1`
     FOREIGN KEY (`currency_code`)
-    REFERENCES `coffee_db`.`currency` (`currency_code`)
+    REFERENCES `cool_beans`.`currency` (`currency_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`sale_items`
+-- Table `cool_beans`.`sale_items`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`sale_items` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`sale_items` (
   `sale_items_id` INT NOT NULL,
   `sale_id` INT NOT NULL,
-  `bean_bean_id` INT NOT NULL,
+  `bean_id` INT NOT NULL,
   `quantity` INT NULL,
   `unit_price` DECIMAL(18,2) NULL,
   `subtotal` DECIMAL(18,2) NULL,
   PRIMARY KEY (`sale_items_id`),
   INDEX `fk_sales_items_sales1_idx` (`sale_id` ASC) VISIBLE,
-  INDEX `fk_sales_items_coffee_bean1_idx` (`bean_bean_id` ASC) VISIBLE,
+  INDEX `fk_sales_items_coffee_bean1_idx` (`bean_id` ASC) VISIBLE,
   CONSTRAINT `fk_sales_items_sales1`
     FOREIGN KEY (`sale_id`)
-    REFERENCES `coffee_db`.`sale` (`sale_id`)
+    REFERENCES `cool_beans`.`sale` (`sale_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_sales_items_coffee_bean1`
-    FOREIGN KEY (`bean_bean_id`)
-    REFERENCES `coffee_db`.`coffee_bean` (`bean_id`)
+    FOREIGN KEY (`bean_id`)
+    REFERENCES `cool_beans`.`coffee_bean` (`bean_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`store_inventory`
+-- Table `cool_beans`.`store_inventory`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`store_inventory` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`store_inventory` (
   `inventory_id` INT NOT NULL,
   `store_id` INT NOT NULL,
-  `bean_bean_id` INT NOT NULL,
+  `bean_id` INT NOT NULL,
   `quantity_kg` INT NULL,
   `last_updated` DATE NULL,
   PRIMARY KEY (`inventory_id`),
   INDEX `fk_store_inventory_store1_idx` (`store_id` ASC) VISIBLE,
-  INDEX `fk_store_inventory_coffee_bean1_idx` (`bean_bean_id` ASC) VISIBLE,
+  INDEX `fk_store_inventory_coffee_bean1_idx` (`bean_id` ASC) VISIBLE,
   CONSTRAINT `fk_store_inventory_store1`
     FOREIGN KEY (`store_id`)
-    REFERENCES `coffee_db`.`store` (`store_id`)
+    REFERENCES `cool_beans`.`store` (`store_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_store_inventory_coffee_bean1`
-    FOREIGN KEY (`bean_bean_id`)
-    REFERENCES `coffee_db`.`coffee_bean` (`bean_id`)
+    FOREIGN KEY (`bean_id`)
+    REFERENCES `cool_beans`.`coffee_bean` (`bean_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`supplier_inventory`
+-- Table `cool_beans`.`supplier_inventory`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`supplier_inventory` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`supplier_inventory` (
   `supplier_inv_id` INT NOT NULL,
   `supplier_id` INT NOT NULL,
   `bean_id` INT NOT NULL,
@@ -281,26 +291,26 @@ CREATE TABLE IF NOT EXISTS `coffee_db`.`supplier_inventory` (
   INDEX `fk_supplier_inventory_currency1_idx` (`currency_code` ASC) VISIBLE,
   CONSTRAINT `fk_supplier_inventory_supplier1`
     FOREIGN KEY (`supplier_id`)
-    REFERENCES `coffee_db`.`supplier` (`supplier_id`)
+    REFERENCES `cool_beans`.`supplier` (`supplier_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_supplier_inventory_coffee_bean1`
     FOREIGN KEY (`bean_id`)
-    REFERENCES `coffee_db`.`coffee_bean` (`bean_id`)
+    REFERENCES `cool_beans`.`coffee_bean` (`bean_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_supplier_inventory_currency1`
     FOREIGN KEY (`currency_code`)
-    REFERENCES `coffee_db`.`currency` (`currency_code`)
+    REFERENCES `cool_beans`.`currency` (`currency_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`restock`
+-- Table `cool_beans`.`restock`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`restock` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`restock` (
   `restock_id` INT NOT NULL,
   `store_id` INT NOT NULL,
   `supplier_id` INT NOT NULL,
@@ -313,51 +323,51 @@ CREATE TABLE IF NOT EXISTS `coffee_db`.`restock` (
   INDEX `fk_restock_currency1_idx` (`currency_code` ASC) VISIBLE,
   CONSTRAINT `fk_restock_store1`
     FOREIGN KEY (`store_id`)
-    REFERENCES `coffee_db`.`store` (`store_id`)
+    REFERENCES `cool_beans`.`store` (`store_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_restock_supplier1`
     FOREIGN KEY (`supplier_id`)
-    REFERENCES `coffee_db`.`supplier` (`supplier_id`)
+    REFERENCES `cool_beans`.`supplier` (`supplier_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_restock_currency1`
     FOREIGN KEY (`currency_code`)
-    REFERENCES `coffee_db`.`currency` (`currency_code`)
+    REFERENCES `cool_beans`.`currency` (`currency_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`restock_items`
+-- Table `cool_beans`.`restock_items`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`restock_items` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`restock_items` (
   `restock_id` INT NOT NULL,
-  `bean_bean_id` INT NOT NULL,
+  `bean_id` INT NOT NULL,
   `quantity` INT NULL,
   `unit_cost` DECIMAL(18,2) NULL,
   `subtotal` DECIMAL(18,2) NULL,
   INDEX `fk_restock_items_restock1_idx` (`restock_id` ASC) VISIBLE,
-  PRIMARY KEY (`restock_id`, `bean_bean_id`),
-  INDEX `fk_restock_items_coffee_bean1_idx` (`bean_bean_id` ASC) VISIBLE,
+  PRIMARY KEY (`restock_id`, `bean_id`),
+  INDEX `fk_restock_items_coffee_bean1_idx` (`bean_id` ASC) VISIBLE,
   CONSTRAINT `fk_restock_items_restock1`
     FOREIGN KEY (`restock_id`)
-    REFERENCES `coffee_db`.`restock` (`restock_id`)
+    REFERENCES `cool_beans`.`restock` (`restock_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_restock_items_coffee_bean1`
-    FOREIGN KEY (`bean_bean_id`)
-    REFERENCES `coffee_db`.`coffee_bean` (`bean_id`)
+    FOREIGN KEY (`bean_id`)
+    REFERENCES `cool_beans`.`coffee_bean` (`bean_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`sale_payment`
+-- Table `cool_beans`.`sale_payment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`sale_payment` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`sale_payment` (
   `payment_id` INT NOT NULL AUTO_INCREMENT,
   `sale_id` INT NOT NULL,
   `payment_date` DATE NULL,
@@ -370,21 +380,21 @@ CREATE TABLE IF NOT EXISTS `coffee_db`.`sale_payment` (
   INDEX `fk_sale_payment_currency1_idx` (`currency_code` ASC) VISIBLE,
   CONSTRAINT `fk_sale_payment_sale1`
     FOREIGN KEY (`sale_id`)
-    REFERENCES `coffee_db`.`sale` (`sale_id`)
+    REFERENCES `cool_beans`.`sale` (`sale_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_sale_payment_currency1`
     FOREIGN KEY (`currency_code`)
-    REFERENCES `coffee_db`.`currency` (`currency_code`)
+    REFERENCES `cool_beans`.`currency` (`currency_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `coffee_db`.`restock_payment`
+-- Table `cool_beans`.`restock_payment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `coffee_db`.`restock_payment` (
+CREATE TABLE IF NOT EXISTS `cool_beans`.`restock_payment` (
   `payment_id` INT NOT NULL AUTO_INCREMENT,
   `restock_id` INT NOT NULL,
   `payment_date` DATE NULL,
@@ -397,15 +407,47 @@ CREATE TABLE IF NOT EXISTS `coffee_db`.`restock_payment` (
   INDEX `fk_restock_payment_currency1_idx` (`currency_code` ASC) VISIBLE,
   CONSTRAINT `fk_restock_payment_restock1`
     FOREIGN KEY (`restock_id`)
-    REFERENCES `coffee_db`.`restock` (`restock_id`)
+    REFERENCES `cool_beans`.`restock` (`restock_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_restock_payment_currency1`
     FOREIGN KEY (`currency_code`)
-    REFERENCES `coffee_db`.`currency` (`currency_code`)
+    REFERENCES `cool_beans`.`currency` (`currency_code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+
+-- ============================================================
+-- USERS TABLE (NEW - Authentication & RBAC)
+-- ============================================================
+
+CREATE TABLE `cool_beans`.`users` (
+    `user_id` INT AUTO_INCREMENT PRIMARY KEY,
+    `first_name` VARCHAR(50) NULL,
+    `last_name` VARCHAR(50) NULL,
+    `username` VARCHAR(50) UNIQUE NOT NULL,
+    `email` VARCHAR(50) UNIQUE NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    `role` ENUM('ADMIN', 'STAFF', 'CUSTOMER') NOT NULL DEFAULT 'CUSTOMER',
+    `linked_customer_id` INT NULL,
+    `linked_store_id` INT NULL,
+    `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	INDEX `fk_users_linked_customer_id_idx` (`linked_customer_id` ASC) VISIBLE,
+    INDEX `fk_users_linked_store_id_idx` (`linked_store_id` ASC) VISIBLE,
+    CONSTRAINT `fk_users_linked_customer_id`
+      FOREIGN KEY (`linked_customer_id`) 
+      REFERENCES `cool_beans`.`customer`(`customer_id`) 
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION,
+	CONSTRAINT `fk_users_linked_store_id`
+      FOREIGN KEY (`linked_store_id`) 
+      REFERENCES `cool_beans`.`store`(`store_id`) 
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION
+) ENGINE=InnoDB;
+
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

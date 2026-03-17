@@ -1,23 +1,15 @@
 <?php
-// Database credentials
-$host = "10.2.0.17"; // VM IP
-$database = "coffee_db";
-$username = "root";
-$password = "vV7R85gzTbXC";
+    // Database credentials
+    $host = "10.2.0.17:22017"; // VM IP
+    $database = "cool_beans";
+    $username = "root";
+    $password = "RqxWHOg1ZJfY";
 
-try {
-    $conn = new PDO("mysql:host=$host;dbname=$database", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-}
-catch(PDOException $e){
-    echo "Connection failed: " . $e->getMessage();
-}
+    // Create connection
+    $conn = new mysqli($host, $username, $password, $database);
 
-/* Create connection
-$conn = new mysqli($host, $username, $password, $database);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}*/
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
 ?>
