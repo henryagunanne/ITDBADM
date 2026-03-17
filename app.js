@@ -26,14 +26,74 @@ server.use(express.static('public'));
 
 const sampleBeans = [
   [
-    { id: 0, name: "Arabica", price: 450 },
-    { id: 1, name: "Robusta", price: 350 },
-    { id: 2, name: "Liberica", price: 500 }
+    {
+      bean_id: 0,
+      bean_name: "Arabica",
+      bean_image_path: "/common/coffee-bag.png",
+      variety: "Typica",
+      origin_province_id: 1,
+      roast_level: "MEDIUM",
+      price_per_kg: 450.00,
+      supplier_id: 101,
+      description: "Smooth and balanced with mild acidity and sweet notes."
+    },
+    {
+      bean_id: 1,
+      bean_name: "Robusta",
+      bean_image_path: "/common/coffee-bag.png",
+      variety: "Canephora",
+      origin_province_id: 2,
+      roast_level: "DARK",
+      price_per_kg: 350.00,
+      supplier_id: 102,
+      description: "Strong, bold flavor with high caffeine content."
+    },
+    {
+      bean_id: 2,
+      bean_name: "Liberica",
+      bean_image_path: "/common/coffee-bag.png",
+      variety: "Barako",
+      origin_province_id: 3,
+      roast_level: "MEDIUM_DARK",
+      price_per_kg: 500.00,
+      supplier_id: 103,
+      description: "Distinct smoky aroma with fruity undertones."
+    }
   ],
   [
-    { id: 3, name: "Excelsa", price: 480 },
-    { id: 4, name: "Colombian Supremo", price: 550 },
-    { id: 5, name: "Ethiopian Yirgacheffe", price: 600 }
+    {
+      bean_id: 3,
+      bean_name: "Excelsa",
+      bean_image_path: "/common/coffee-bag.png",
+      variety: "Excelsa",
+      origin_province_id: 4,
+      roast_level: "LIGHT",
+      price_per_kg: 480.00,
+      supplier_id: 104,
+      description: "Tart, fruity profile often used in blends."
+    },
+    {
+      bean_id: 4,
+      bean_name: "Colombian Supremo",
+      bean_image_path: "/common/coffee-bag.png",
+      variety: "Supremo",
+      origin_province_id: 5,
+      roast_level: "MEDIUM",
+      price_per_kg: 550.00,
+      supplier_id: 105,
+      description: "Rich flavor with caramel sweetness and mild acidity."
+    },
+    {
+      bean_id: 5,
+      bean_name: "Ethiopian Yirgacheffe",
+      bean_image_path: "/common/coffee-bag.png",
+      variety: "Heirloom",
+      origin_province_id: 6,
+      roast_level: "LIGHT",
+      price_per_kg: 600.00,
+      supplier_id: 106,
+      description: "Floral aroma with citrus and tea-like body."
+    }
   ]
 ];
 
@@ -41,7 +101,7 @@ server.get('/', function(req, resp){
     resp.render('home',{
         layout: 'index',
         title: 'Home | Cool Beans',
-        beans: sampleBeans,
+        beans: sampleBeans.slice(0, 1),
         ffact: {title: "Every purchase helps a local farmer!", description: "Some fact about farmers"},
         testimonials: [{title: "Ang sarap!", description: "Super!", author: "J. Daguiso"}, {title: "Ang sarap!", description: "Super!", author: "H. Agunanne"}, {title: "Ang sarap!", description: "Super!", author: "M. Andaya"}]
     });
@@ -61,13 +121,13 @@ server.get('/view/beans/:id', function(req, resp){
 
     const bean = sampleBeans
         .flat()
-        .find(b => b.id === id);
+        .find(b => b.bean_id === id);
     
     resp.render('item',{
         layout: 'index',
-        title: bean.name + ' Beans | Cool Beans',
+        title: bean.bean_name + ' Beans | Cool Beans',
         selected: bean,
-        location: 'Home > Beans > ' + bean.name
+        location: 'Home > Beans > ' + bean.bean_name
     });
 });
 
