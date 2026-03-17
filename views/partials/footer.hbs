@@ -21,3 +21,20 @@
     </tr>
   </table>
 </footer>
+
+<!-- cart popup script -->
+<script method="post">
+    const showPopupCart = document.querySelector('.cart-icon');
+    const popupContainerCart = document.querySelector('.cart-container');
+
+showPopupCart.onclick = (e) => {
+    e.preventDefault();
+    popupContainerCart.classList.toggle('active'); 
+};
+
+window.onclick = (e) => {
+    if (!popupContainerCart.contains(e.target) && !showPopupCart.contains(e.target)) {
+        popupContainerCart.classList.remove('active');
+    }
+};
+</script>

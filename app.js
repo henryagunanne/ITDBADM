@@ -13,6 +13,9 @@ const hbs = handlebars.create({
     helpers: {
         json: function(context) {
             return JSON.stringify(context || []);
+        },
+        multiply: (a, b) => {
+            return (a * b).toFixed(2);
         }
     }
 });
@@ -97,11 +100,47 @@ const sampleBeans = [
   ]
 ];
 
+const sampleCart = {
+  items: [
+    {
+      bean: {
+        bean_id: 0,
+        bean_name: "Arabica",
+        price_per_kg: 450.00,
+        bean_image_path: "/common/coffee-bag.png"
+      },
+      quantity: 2
+    },
+    {
+      bean: {
+        bean_id: 3,
+        bean_name: "Excelsa",
+        price_per_kg: 480.00,
+        bean_image_path: "/common/coffee-bag.png"
+      },
+      quantity: 1
+    },
+    {
+      bean: {
+        bean_id: 5,
+        bean_name: "Ethiopian Yirgacheffe",
+        price_per_kg: 600.00,
+        bean_image_path: "/common/coffee-bag.png"
+      },
+      quantity: 4
+    }
+  ],
+  total_price: 3780.00
+};
+
 server.get('/', function(req, resp){
+
     resp.render('home',{
         layout: 'index',
         title: 'Home | Cool Beans',
         beans: sampleBeans.slice(0, 1),
+        items: sampleCart.items,
+        total_price: sampleCart.total_price,
         ffact: {title: "Every purchase helps a local farmer!", description: "Some fact about farmers"},
         testimonials: [{title: "Ang sarap!", description: "Super!", author: "J. Daguiso"}, {title: "Ang sarap!", description: "Super!", author: "H. Agunanne"}, {title: "Ang sarap!", description: "Super!", author: "M. Andaya"}]
     });
@@ -112,6 +151,8 @@ server.get('/view/beans', function(req, resp){
         layout: 'index',
         title: 'Shop for Beans | Cool Beans',
         beans: sampleBeans,
+        items: sampleCart,
+        total_price: sampleCart.total_price,
         location: 'Home > Beans'
     });
 });
@@ -131,6 +172,8 @@ server.get('/view/beans/:id', function(req, resp){
         title: bean.bean_name + ' Beans | Cool Beans',
         selected: bean,
         beans: sampleBeans,
+        items: sampleCart,
+        total_price: sampleCart.total_price,
         location: 'Home > Beans > ' + bean.bean_name
     });
 });
