@@ -1,3 +1,7 @@
+
+-- -------------------------------------
+--  Coffee bean Delete log
+-- -------------------------------------
 DELIMITER $$
 
 CREATE TRIGGER before_coffee_bean_delete
@@ -22,6 +26,22 @@ BEGIN
         OLD.price_per_kg,
         NOW()
     );
-END$$
+END
 
-DELIMITER ;
+$$ DELIMITER ;
+
+
+-- -------------------------------------
+--  Coffee bean Update audit log
+-- -------------------------------------
+DELIMITER $$
+
+CREATE TRIGGER before_coffee_bean_update
+AFTER UPDATE ON coffee_bean
+FOR EACH ROW
+BEGIN
+    INSERT INTO coffee_bean_update_log (bean_id)
+    VALUES (OLD.bean_id);
+END
+
+$$ DELIMITER ;

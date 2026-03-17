@@ -3,6 +3,7 @@
     include("../config/db-connect.php");
     
     $cart = $_SESSION['cart'] ?? [];
+    $cartItems = [];
     
     foreach ($cart as $bean_id => $quantity) {
     
@@ -20,11 +21,13 @@
         $variety = $row['variety'];
         $roast_level = $row['roast_level'];
     
-        echo json_encode([
+        $cart_items[] = [
             'bean' => $bean,
             'variety' => $variety,
             'roast_level' => $roast_level,
             'qty' => $quantity
-        ]);
+        ];
     }
+
+    echo json_encode($cart_items);
 ?>

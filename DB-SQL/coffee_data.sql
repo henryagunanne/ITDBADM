@@ -153,9 +153,9 @@ INSERT INTO city VALUES
 -- > names are based on a famous landmarks
 -- ----------------------------------------
 INSERT INTO store VALUES
-(1, "Intramuros Branch", "09182315982", "No. 56 Aragon St., SFDM", 19),		-- manila (NCR)
-(2, "Burnham Branch", "09632936321", "8263 Constancia Street 1200", 3),		-- baguio (CAR)
-(3, "Taal Branch", "09646113128", "1051 North Bay Blvd.", 14);				-- lucena (calabarzon)
+(1, "Cool Beans - Intramuros Branch", "09182315982", "No. 56 Aragon St., SFDM", 19),		-- manila (NCR)
+(2, "Cool Beans - Burnham Branch", "09632936321", "8263 Constancia Street 1200", 3),		-- baguio (CAR)
+(3, "Cool Beans - Taal Branch", "09646113128", "1051 North Bay Blvd.", 14);				-- lucena (calabarzon)
 
 
 -- ---------------------------------------
@@ -175,15 +175,15 @@ INSERT INTO supplier VALUES
 -- ---------------------------------------
 -- Fill coffee_bean table
 -- ----------------------------------------
-INSERT INTO coffee_bean VALUES 
-(1, "Arabica", "", 70),
-(2, "Sagada Coffee", "", 70),
-(3, "Robusta", "", 39),
-(4, "Liberica", "", 18),
-(5, "Excelsa", "", 18),
-(6, "Daguma Coffee", "", 62),
-(7, "Kulaman Coffee", "", 62),
-(8, "Civet Coffee", "", 61);
+INSERT INTO coffee_bean VALUES
+(1, 'Benguet Arabica Premium', 'Arabica', 70, 'MEDIUM', 850.00, 1, 'High-altitude Arabica from the mountains of Benguet. Bright acidity with citrus notes.'),
+(2, 'Benguet Dark Reserve', 'Arabica', 18, 'DARK', 920.00, 1, 'Full-bodied dark roast with chocolate and smoky undertones.'),
+(3, 'Sagada Arabica', 'Arabica', 70, 'LIGHT', 780.00, 2, 'Light roast preserving delicate floral and fruity notes from Sagada highlands.'),
+(4, 'Sagada Dark Roast', 'Arabica', 61, 'MEDIUM_DARK', 880.00, 2, 'Bold Sagada Arabica with caramel sweetness and deep body.'),
+(5, 'Davao Robusta Classic', 'Robusta', 39, 'DARK', 520.00, 3, 'Strong, earthy Robusta from Davao lowlands. High caffeine content.'),
+(6, 'Davao Liberica Rare', 'Liberica', 18, 'MEDIUM', 1200.00, 3, 'Rare Liberica variety with unique woody and floral profile.'),
+(7, 'Oro Valley Blend', 'Robusta', 62, 'MEDIUM', 580.00, 4, 'Smooth Robusta blend from the valleys of Davao de Oro.'),
+(8, 'Cavite Barako Bold', 'Liberica', 62, 'DARK', 680.00, 5, 'Traditional Filipino Barako. Bold, strong, and aromatic.');
 
 
 -- ---------------------------------------
@@ -220,3 +220,53 @@ INSERT INTO exchange_rate VALUES
 (4, "USD", "JPY", 157.05, "2026-03-05"),
 (5, "JPY", "PHP", 0.37, "2026-03-05"),
 (6, "JPY", "USD", 0.0064, "2026-03-05"); 
+
+
+-- Store Inventory
+INSERT INTO store_inventory (store_id, bean_id, quantity_kg) VALUES
+(1, 1, 45), (1, 2, 30), (1, 3, 22), (1, 5, 60), (1, 8, 15),
+(2, 1, 35), (2, 4, 4), (2, 6, 12), (2, 7, 50),
+(3, 2, 3), (3, 3, 18), (3, 5, 40), (3, 6, 8),
+(4, 1, 25), (4, 5, 55), (4, 7, 3), (4, 8, 35);
+
+
+-- Sample Sales
+INSERT INTO sale (store_id, customer_id, sale_date, total_amount) VALUES
+(1, 1, '2026-02-10', 2220.00),
+(2, 2, '2026-02-11', 1200.00),
+(3, 3, '2026-03-12', 920.00);
+
+
+INSERT INTO sale_items (sale_id, bean_id, quantity, unit_price, subtotal) VALUES
+(1, 1, 2, 850.00, 1700.00),
+(1, 5, 1, 520.00, 520.00),
+(2, 6, 1, 1200.00, 1200.00),
+(3, 2, 1, 920.00, 920.00);
+
+INSERT INTO sale_payment (sale_id, payment_date, amount_paid, currency_code, payment_method) VALUES
+(1, '2026-02-10', 2220.00, 'PHP', 'BANK TRANSFER'),
+(2, '2026-02-11', 1200.00, 'PHP','CARD'),
+(3, '2026-03-12', 920.00, 'USD', 'CASH');
+
+-- Sample Restocks
+INSERT INTO restock (store_id, supplier_id, restock_date, total_amount) VALUES
+(2, 2, '2026-01-08', 17500.00),
+(3, 1, '2026-01-09', 15000.00);
+
+INSERT INTO restock_items (restock_id, bean_id, quantity, unit_cost) VALUES
+(1, 4, 25.00, 700.00),
+(2, 2, 20.00, 750.00);
+
+INSERT INTO restock_payment (restock_id, payment_date, amount_paid, currency_code, payment_method) VALUES
+(1, '2026-01-08', 17500.00, 'PHP', 'CASH'),
+(2, '2026-01-09', 15000.00, 'PHP', 'CASH');
+
+-- Users (passwords are bcrypt hashes of: admin123, staff123, customer123)
+INSERT INTO users (username, password, role, linked_customer_id, linked_store_id) VALUES
+('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ADMIN', NULL, NULL),
+('staff_intramuros', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'STAFF', NULL, 1),
+('staff_burnham', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'STAFF', NULL, 2),
+('carlo_r', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'CUSTOMER', 1, NULL),
+('sofia_a', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'CUSTOMER', 2, NULL);
+
+

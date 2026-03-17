@@ -79,15 +79,15 @@
 
             // Add sale (total amount is added later)
             $sql = "INSERT INTO sale 
-                    (store_id, customer_id, sale_date, currency_code)
-                    VALUES (?, ?, ?, ?)";
+                    (store_id, customer_id, sale_date)
+                    VALUES (?, ?, ?)";
             
             $stmt3 = $conn->prepare($sql);
             if (!$stmt3) {
                 throw new Exception("Prepare failed: " . $conn->error);
             }
 
-            $stmt3->bind_param('iiss', $store, $customer_id, $sale_date, $currency);
+            $stmt3->bind_param('iis', $store, $customer_id, $sale_date);
             if (!$stmt3->execute()) {
                 throw new Exception("Execute failed: " . $stmt3->error);
             }

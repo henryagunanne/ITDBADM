@@ -21,7 +21,7 @@ USE `cool_beans` ;
 -- Table `cool_beans`.`region`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cool_beans`.`region` (
-  `region_id` INT NOT NULL,
+  `region_id` INT NOT NULL AUTO_INCREMENT,
   `region_name` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`region_id`),
   UNIQUE INDEX `region_id_UNIQUE` (`region_id` ASC) VISIBLE)
@@ -31,7 +31,7 @@ ENGINE = InnoDB;
 -- Table `cool_beans`.`province`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cool_beans`.`province` (
-  `province_id` INT NOT NULL,
+  `province_id` INT NOT NULL AUTO_INCREMENT,
   `province_name` VARCHAR(45) NOT NULL,
   `region_id` INT NOT NULL,
   PRIMARY KEY (`province_id`),
@@ -51,13 +51,13 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `cool_beans`.`city` (
   `city_id` INT NOT NULL,
   `city_name` VARCHAR(45) NOT NULL,
-  `province_id` INT NOT NULL,
+  `region_id` INT NOT NULL,
   PRIMARY KEY (`city_id`),
   UNIQUE INDEX `city_id_UNIQUE` (`city_id` ASC) VISIBLE,
-  INDEX `fk_city_province_idx` (`province_id` ASC) VISIBLE,
-  CONSTRAINT `fk_city_province`
-    FOREIGN KEY (`province_id`)
-    REFERENCES `cool_beans`.`province` (`province_id`)
+  INDEX `fk_city_region_idx` (`region_id` ASC) VISIBLE,
+  CONSTRAINT `fk_city_region`
+    FOREIGN KEY (`region_id`)
+    REFERENCES `cool_beans`.`region` (`region_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -88,11 +88,11 @@ ENGINE = InnoDB;
 -- Table `cool_beans`.`coffee_bean`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cool_beans`.`coffee_bean` (
-  `bean_id` INT NOT NULL,
+  `bean_id` INT NOT NULL AUTO_INCREMENT,
   `bean_name` VARCHAR(100) NOT NULL,
   `variety` VARCHAR(100) NULL,
   `origin_province_id` INT NOT NULL,
-  `roast_level` ENUM('LIGHT', 'MEDIUM', 'MEDIUM_DARK', 'DARK') NOT NULL,
+  `roast_level` ENUM('LIGHT', 'MEDIUM', 'MEDIUM_DARK', 'DARK') NULL,
   `price_per_kg` DECIMAL(10,2) NOT NULL,
   `supplier_id` INT NOT NULL,
   `description` TEXT NULL,
@@ -117,7 +117,7 @@ ENGINE = InnoDB;
 -- Table `cool_beans`.`store`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cool_beans`.`store` (
-  `store_id` INT NOT NULL,
+  `store_id` INT NOT NULL AUTO_INCREMENT,
   `store_name` VARCHAR(100) NOT NULL,
   `contact_number` VARCHAR(45) NULL,
   `address` VARCHAR(150) NOT NULL,
@@ -137,10 +137,10 @@ ENGINE = InnoDB;
 -- Table `cool_beans`.`customer`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cool_beans`.`customer` (
-  `customer_id` INT NOT NULL,
+  `customer_id` INT AUTO_INCREMENT NOT NULL,
   `first_name` VARCHAR(100) NOT NULL,
   `last_name` VARCHAR(100) NULL,
-  `email` VARCHAR(100) NULL,
+  `email` VARCHAR(100) NOT NULL,
   `contact_number` VARCHAR(45) NULL,
   `address` VARCHAR(150) NULL,
   `city_id` INT NOT NULL,
@@ -196,16 +196,14 @@ ENGINE = InnoDB;
 -- Table `cool_beans`.`sale`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cool_beans`.`sale` (
-  `sale_id` INT NOT NULL,
+  `sale_id` INT NOT NULL AUTO_INCREMENT,
   `store_id` INT NOT NULL,
   `customer_id` INT NOT NULL,
   `sale_date` DATE NULL,
   `total_amount` DECIMAL(18,2) NULL,
-  `currency_code` VARCHAR(5) NOT NULL,
   PRIMARY KEY (`sale_id`),
   INDEX `fk_sales_store1_idx` (`store_id` ASC) VISIBLE,
   INDEX `fk_sales_customer1_idx` (`customer_id` ASC) VISIBLE,
-  INDEX `fk_sales_currency1_idx` (`currency_code` ASC) VISIBLE,
   CONSTRAINT `fk_sales_store1`
     FOREIGN KEY (`store_id`)
     REFERENCES `cool_beans`.`store` (`store_id`)
@@ -215,11 +213,6 @@ CREATE TABLE IF NOT EXISTS `cool_beans`.`sale` (
     FOREIGN KEY (`customer_id`)
     REFERENCES `cool_beans`.`customer` (`customer_id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_sales_currency1`
-    FOREIGN KEY (`currency_code`)
-    REFERENCES `cool_beans`.`currency` (`currency_code`)
-    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -228,7 +221,7 @@ ENGINE = InnoDB;
 -- Table `cool_beans`.`sale_items`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cool_beans`.`sale_items` (
-  `sale_items_id` INT NOT NULL,
+  `sale_items_id` INT NOT NULL AUTO_INCREMENT,
   `sale_id` INT NOT NULL,
   `bean_id` INT NOT NULL,
   `quantity` INT NULL,
@@ -254,7 +247,7 @@ ENGINE = InnoDB;
 -- Table `cool_beans`.`store_inventory`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cool_beans`.`store_inventory` (
-  `inventory_id` INT NOT NULL,
+  `inventory_id` INT NOT NULL AUTO_INCREMENT,
   `store_id` INT NOT NULL,
   `bean_id` INT NOT NULL,
   `quantity_kg` INT NULL,
@@ -279,7 +272,7 @@ ENGINE = InnoDB;
 -- Table `cool_beans`.`supplier_inventory`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cool_beans`.`supplier_inventory` (
-  `supplier_inv_id` INT NOT NULL,
+  `supplier_inv_id` INT NOT NULL AUTO_INCREMENT,
   `supplier_id` INT NOT NULL,
   `bean_id` INT NOT NULL,
   `quantity_kg` INT NULL,
@@ -311,16 +304,14 @@ ENGINE = InnoDB;
 -- Table `cool_beans`.`restock`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cool_beans`.`restock` (
-  `restock_id` INT NOT NULL,
+  `restock_id` INT NOT NULL AUTO_INCREMENT,
   `store_id` INT NOT NULL,
   `supplier_id` INT NOT NULL,
   `restock_date` DATE NULL,
-  `currency_code` VARCHAR(5) NOT NULL,
   `total_amount` DECIMAL(18,2) NULL,
   PRIMARY KEY (`restock_id`),
   INDEX `fk_restock_store1_idx` (`store_id` ASC) VISIBLE,
   INDEX `fk_restock_supplier1_idx` (`supplier_id` ASC) VISIBLE,
-  INDEX `fk_restock_currency1_idx` (`currency_code` ASC) VISIBLE,
   CONSTRAINT `fk_restock_store1`
     FOREIGN KEY (`store_id`)
     REFERENCES `cool_beans`.`store` (`store_id`)
@@ -330,11 +321,6 @@ CREATE TABLE IF NOT EXISTS `cool_beans`.`restock` (
     FOREIGN KEY (`supplier_id`)
     REFERENCES `cool_beans`.`supplier` (`supplier_id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_restock_currency1`
-    FOREIGN KEY (`currency_code`)
-    REFERENCES `cool_beans`.`currency` (`currency_code`)
-    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -343,7 +329,7 @@ ENGINE = InnoDB;
 -- Table `cool_beans`.`restock_items`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cool_beans`.`restock_items` (
-  `restock_id` INT NOT NULL,
+  `restock_id` INT NOT NULL AUTO_INCREMENT,
   `bean_id` INT NOT NULL,
   `quantity` INT NULL,
   `unit_cost` DECIMAL(18,2) NULL,
@@ -460,6 +446,14 @@ CREATE TABLE `cool_beans`.`coffee_bean_delete_log` (
     `deleted_at` DATETIME DEFAULT CURRENT_TIMESTAMP
 )ENGINE=InnoDB;
 
+-- ====================================
+-- Update Coffee bean audit log Table
+-- ====================================
+CREATE TABLE `cool_beans`.`coffee_bean_update_log` (
+    `log_id` INT AUTO_INCREMENT PRIMARY KEY,
+    `bean_id` INT,
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+)ENGINE=InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
