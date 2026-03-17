@@ -27,7 +27,7 @@
         <header>
             <nav>
                 <div class="nav-links">
-                    <a href="">Home</a>
+                    <a href="" style="font-weight: bold;">Home</a>
                     <a href="beans.html">Beans</a>
                     <a href="">About Us</a>
                 </div>
@@ -36,11 +36,44 @@
 
                 <div class="nav-icons">
                     <a href=""><img src="images/search.png" class="icons" /></a>
-                    <a href=""><img src="images/shopping-cart.png" class="icons" /></a>
+                    <a href=""><img src="images/shopping-cart.png" class="cart-icon" /></a>
                     <a href=""><img src="images/user.png" class="icons" /></a>
                 </div>
             </nav>
         </header>
+
+        <!-- CART POPUP -->
+        <!-- NOTE : these are placeholders -->
+        <div class="cart-container"> 
+            <div class="cart-content">
+                <h3>Your Cart</h3>
+                <hr> 
+                <div class="item">
+                    <img src="images/coffee-bag.png" class="cart-item-img" />
+                    <div class="cart-info">
+                        <h5>Arabica</h5>
+                        <p class="price">P250.00</p>
+                        <div class="qty-row">
+                            <span>Quantity:</span>
+                        <div class="qty-selector">
+                            <button>-</button> <span>1</span> <button>+</button>
+                        </div>
+                    </div>
+                    <p class="item-total">Total: P250.00</p>
+                    </div>
+                    <button class="delete-btn"><img src="images/bin.png"></button>
+                </div>
+                
+                <div class="cart-footer">
+                    <hr>
+                    <div class="subtotal-row">
+                        <span class="label">Subtotal:</span>
+                        <span class="amount">P250.00</span>
+                    </div>
+                    <button class="checkout-btn" onclick="location.href='checkout.html'">Checkout</button>
+                </div>
+            </div>
+        </div>
 
         <!-- TOP PART -->
         <section class="top-container">
@@ -165,7 +198,7 @@
             <img src="images/coffee-farmer.jpeg" />
             <div class="info">
                 <h3>Every purchase helps a<br>local farmer!</h3>
-                <p>Some fact about farmers</p>
+                <p>cool beans is dedicated to empowering Filipino farmers from various regions, helping them bring their harvest directly to your cup.</p>
             </div>
         </section>
 
@@ -176,21 +209,21 @@
 
             <div class="testimonials">
                 <div class="testimony">
-                    <h4>Title</h4>
-                    <p>This is where the feedback would go.</p>
-                    <h5>- Name</h5>
+                    <h4>Best Arabica in Town!</h4>
+                    <p>The roast is perfect and the aroma fills my whole house every morning. You can really taste the quality of the local beans.</p>
+                    <h5>- Miguel S.</h5>
                 </div>
 
                 <div class="testimony">
-                    <h4>Title</h4>
-                    <p>This is where the feedback would go.</p>
-                    <h5>- Name</h5>
+                    <h4>Coffee with a Heart</h4>
+                    <p>I love knowing that my caffeine fix helps support our local farmers in Benguet. It makes every sip taste even better!</p>
+                    <h5>- Anna R.</h5>
                 </div>
 
                 <div class="testimony">
-                    <h4>Title</h4>
-                    <p>This is where the feedback would go.</p>
-                    <h5>- Name</h5>
+                    <h4>Just Amazing!</h4>
+                    <p>The beans arrived just a few days after roasting. Best Bukidnon Robusta I've ever had. Solid 10/10 experience!</p>
+                    <h5>- Juan D.</h5>
                 </div>
             </div>
         </section>
@@ -220,4 +253,21 @@
             </table>
         </footer>
     </body>
+
+    <!-- cart popup script -->
+    <script method="post">
+        const showPopupCart = document.querySelector('.cart-icon');
+        const popupContainerCart = document.querySelector('.cart-container');
+
+    showPopupCart.onclick = (e) => {
+        e.preventDefault();
+        popupContainerCart.classList.toggle('active'); 
+    };
+
+    window.onclick = (e) => {
+        if (!popupContainerCart.contains(e.target) && !showPopupCart.contains(e.target)) {
+            popupContainerCart.classList.remove('active');
+        }
+    };
+    </script>
 </html>
