@@ -5,15 +5,15 @@ const bodyParser = require('body-parser');
 server.use(express.json()); 
 server.use(express.urlencoded({ extended: true }));
 
-const mysql = require('mysql2/promise');
+// const mysql = require('mysql2/promise');
 
-const db = mysql.createPool({
-    host: 'ccscloud.dlsu.edu.ph',
-    port: 21017,
-    user: 'student1',
-    password: 'Dlsu1234!',
-    database: 'coffee_db'
-});
+// const db = mysql.createPool({
+//     host: 'ccscloud.dlsu.edu.ph',
+//     port: 21017,
+//     user: 'student1',
+//     password: 'Dlsu1234!',
+//     database: 'coffee_db'
+// });
 
 // Set up handlebars as view engine
 const handlebars = require('express-handlebars');
@@ -202,32 +202,32 @@ server.get('/checkout', function(req, resp){
     });
 });
 
-server.get('/management', async function(req, res) {
-    try {
+// server.get('/management', async function(req, res) {
+//     try {
 
-        const [beans] = await db.query(`
-            SELECT cb.*, p.province_name
-            FROM coffee_bean cb
-            JOIN province p 
-            ON cb.origin_province_id = p.province_id
-        `);
+//         const [beans] = await db.query(`
+//             SELECT cb.*, p.province_name
+//             FROM coffee_bean cb
+//             JOIN province p 
+//             ON cb.origin_province_id = p.province_id
+//         `);
 
-        const [users] = await db.query(`SELECT * FROM users`);
-        const [suppliers] = await db.query(`SELECT * FROM supplier`);
+//         const [users] = await db.query(`SELECT * FROM users`);
+//         const [suppliers] = await db.query(`SELECT * FROM supplier`);
 
-        res.render('management', {
-            layout: 'index',
-            title: 'Management | Cool Beans',
-            beans,
-            users,
-            suppliers
-        });
+//         res.render('management', {
+//             layout: 'index',
+//             title: 'Management | Cool Beans',
+//             beans,
+//             users,
+//             suppliers
+//         });
 
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Database Error");
-    }
-});
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send("Database Error");
+//     }
+// });
 
 // Start Server
 const port = process.env.PORT || 9090;
