@@ -339,6 +339,12 @@ sidenav {
     align-self: stretch;      
 }
 
+.price-range {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 /* APPLY BUTTON */
 .apply-btn {
     width: 150px;

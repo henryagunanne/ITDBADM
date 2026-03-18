@@ -4,15 +4,37 @@
         <form action="" method="POST" class="options">
             <h5>Origin</h5>
             <!-- NOTE : this should come from our data -->
-            <input type="checkbox" value="Cavite">Cavite<br>
-            <input type="checkbox" value="Laguna">Laguna<br>
-            <input type="checkbox" value="Manila">Manila<br>
+            <select name="origin"> 
+                <option value="1">Cavite</option>
+                <option value="2">Laguna</option>
+                <option value="3">Manila</option>
+            </select>
 
-            <h5>Farmer</h5>
-            <input type="checkbox" value="Old McDonald">Old McDonald<br>
-            <input type="checkbox" value="Pepperidge">Pepperidge<br>
+            <h5>Variety</h5>
+            <!-- NOTE : this should come from our data -->
+            <select name="variety"> 
+                <option value="Typica">Typica</option>
+                <option value="Canephora">Canephora</option>
+                <option value="Barako">Barako</option>
+                <option value="Excelsa">Excelsa</option>
+                <option value="Supremo">Supremo</option>
+                <option value="Heirloom">Heirloom</option>
+            </select>
 
-            <input type="submit" value="Apply" class="apply-btn">  
+            <h5>Roast Level</h5>
+            <select name="roast_level"> 
+                <option value="LIGHT">Light</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="MEDIUM_DARK">Medium Dark</option>
+                <option value="DARK">Dark</option>
+            </select>
+
+            <h5>Price Range</h5>
+            <div class="price-range">
+                <input type="number" name="min_price" placeholder="Min Price">
+                <input type="number" name="max_price" placeholder="Max Price">
+                <input type="submit" value="Apply" class="apply-btn"> 
+            </div>
         </form>
     </div>
 
