@@ -144,10 +144,6 @@ const sampleCart = {
 };
 
 server.get('/', async function(req, resp){
-
-    const [users] = await db.query(`SELECT * FROM users`);
-    console.log(users);
-
     resp.render('home',{
         layout: 'index',
         title: 'Home | Cool Beans',

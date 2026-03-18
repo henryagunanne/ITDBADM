@@ -407,7 +407,9 @@ sidenav {
     gap: 20px;
 }
 
-.email {
+.email,
+.store,
+.login {
     display: flex;
     flex-direction: column;
 }
@@ -526,7 +528,7 @@ hr {
 }
 
 .cart-footer {
-    margin-top: auto; /
+    margin-top: auto;
 }
 
 .subtotal-row {
@@ -557,4 +559,63 @@ hr {
     position: absolute;
     right: 0;
     top: 0;
+}
+
+/* LOGIN STUFF */
+.login-icon {
+    height: 20px; 
+}
+
+.login-container {
+    top: -1000px;
+    position: fixed;
+    right: 50px;
+    width: 320px;
+    max-height: 80vh;
+    height: auto;
+    background: #D9D9D9;
+    border: 1px solid #000;
+    z-index: 999;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    transition: 0.5s ease-in-out;
+    overflow-y: auto;
+}
+
+.login-container.active {
+    top: 80px;
+}
+
+.login-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.login-content h3 {
+    text-align: center;
+    font-size: 24px;
+    margin: 0 0 10px 0;
+}
+
+.login-info p {
+    margin: 5px 0;
+}
+
+.login-footer {
+    margin-top: auto;
+}
+
+.login-btn {
+    width: 100%;
+    background-color: #3a5635;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
 }

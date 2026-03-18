@@ -26,15 +26,26 @@
 <script method="post">
     const showPopupCart = document.querySelector('.cart-icon');
     const popupContainerCart = document.querySelector('.cart-container');
+    const showPopupLogin = document.querySelector('.login-icon');
+    const popupContainerLogin = document.querySelector('.login-container');
 
 showPopupCart.onclick = (e) => {
     e.preventDefault();
     popupContainerCart.classList.toggle('active'); 
 };
 
+showPopupLogin.onclick = (e) => {
+    e.preventDefault();
+    popupContainerLogin.classList.toggle('active'); 
+};
+
 window.onclick = (e) => {
     if (!popupContainerCart.contains(e.target) && !showPopupCart.contains(e.target)) {
         popupContainerCart.classList.remove('active');
     }
+    else if (!popupContainerLogin.contains(e.target) && !showPopupLogin.contains(e.target)) {
+        popupContainerLogin.classList.remove('active');
+    }
 };
+
 </script>
