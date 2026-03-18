@@ -5,6 +5,16 @@ const bodyParser = require('body-parser');
 server.use(express.json()); 
 server.use(express.urlencoded({ extended: true }));
 
+const mysql = require('mysql2/promise');
+
+const db = mysql.createPool({
+    host: 'ccscloud.dlsu.edu.ph',
+    port: 21017,
+    user: 'student1',
+    password: 'Dlsu1234!',
+    database: 'coffee_db'
+});
+
 // Set up handlebars as view engine
 const handlebars = require('express-handlebars');
 const hbs = handlebars.create({
@@ -133,7 +143,10 @@ const sampleCart = {
   total_price: 3780.00
 };
 
-server.get('/', function(req, resp){
+server.get('/', async function(req, resp){
+
+    const [users] = await db.query(`SELECT * FROM users`);
+    console.log(users);
 
     resp.render('home',{
         layout: 'index',
@@ -187,6 +200,33 @@ server.get('/checkout', function(req, resp){
         total_price: sampleCart.total_price,
         location: 'Home > Checkout'
     });
+});
+
+server.get('/management', async function(req, res) {
+    try {
+
+        const [beans] = await db.query(`
+            SELECT cb.*, p.province_name
+            FROM coffee_bean cb
+            JOIN province p 
+            ON cb.origin_province_id = p.province_id
+        `);
+
+        const [users] = await db.query(`SELECT * FROM users`);
+        const [suppliers] = await db.query(`SELECT * FROM supplier`);
+
+        res.render('management', {
+            layout: 'index',
+            title: 'Management | Cool Beans',
+            beans,
+            users,
+            suppliers
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Database Error");
+    }
 });
 
 // Start Server

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Management</title>
+    <link rel="stylesheet" href="/style.css">
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header>
+    <nav>
+        <select>
+            <option>Manila Branch</option>
+            <option>Laguna Branch</option>
+        </select>
+        <img src="/images/logo.png" class="logo" />
+        <a href="#"><img src="/images/user.png" class="icons" /></a>
+    </nav>
+</header>
+
+<h2>Management</h2>
+
+<div class="management-options">
+    <button class="nav-btn" data-target="product-management">Manage Products</button>
+    <button class="nav-btn" data-target="user-management">Manage Users</button>
+    <button class="nav-btn" data-target="supplier-management">Manage Suppliers</button>
+</div>
+
+<div class="table-container">
+
+    <!-- ================= PRODUCTS ================= -->
+    <div id="product-management">
+        <h3>Products</h3>
+        <button>+ Add New</button>
+
+        <table class="viewrecords">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Variety</th>
+                <th>Province</th>
+                <th>Roast</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+
+            {{#each beans}}
+            <tr>
+                <td>{{bean_id}}</td>
+                <td>{{bean_name}}</td>
+                <td>{{variety}}</td>
+                <td>{{province_name}}</td>
+                <td>{{roast_level}}</td>
+                <td>{{price_per_kg}}</td>
+                <td>
+                    <a href="/update/{{bean_id}}">Edit</a> |
+                    <a href="/delete/{{bean_id}}" onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+            </tr>
+            {{/each}}
+
+        </table>
+    </div>
+
+    <!-- ================= USERS ================= -->
+    <div id="user-management" style="display:none;">
+        <h3>Users</h3>
+        <button>+ Add New</button>
+
+        <table class="viewrecords">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Is Active</th>
+            </tr>
+
+            {{#each users}}
+            <tr>
+                <td>{{user_id}}</td>
+                <td>{{username}}</td>
+                <td>{{role}}</td>
+                <td>{{is_active}}</td>
+            </tr>
+            {{/each}}
+
+        </table>
+    </div>
+
+    <!-- ================= SUPPLIERS ================= -->
+    <div id="supplier-management" style="display:none;">
+        <h3>Suppliers</h3>
+        <button>+ Add New</button>
+
+        <table class="viewrecords">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>City</th>
+            </tr>
+
+            {{#each suppliers}}
+            <tr>
+                <td>{{supplier_id}}</td>
+                <td>{{supplier_name}}</td>
+                <td>{{contact_number}}</td>
+                <td>{{email}}</td>
+                <td>{{address}}</td>
+                <td>{{city_id}}</td>
+            </tr>
+            {{/each}}
+
+        </table>
+    </div>
+
+</div>
+
+<script>
+const navButtons = document.querySelectorAll('.nav-btn');
+const sections = document.querySelectorAll('.table-container > div');
+
+navButtons.forEach(button => {
+    button.addEventListener('click', function() {
+
+        sections.forEach(section => {
+            section.style.display = 'none';
+        });
+
+        const target = document.getElementById(this.dataset.target);
+        if (target) target.style.display = 'block';
+    });
+});
+</script>
+
+</body>
+</html>
