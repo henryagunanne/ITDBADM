@@ -567,3 +567,60 @@ hr {
     right: 0;
     top: 0;
 }
+
+/* MANAGEMENT STUFF */
+.management-options {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.management-options button {
+    background-color: #F4E2D0;
+    color: #EA672D;
+    border-color: #EA672D;
+    border-radius: 20px;
+
+    width: 150px;
+    height: 30px;
+}
+
+.management-options button.active-btn {
+    background-color: #EA672D;
+    color: white;             
+    border-color: #EA672D;
+}
+
+/* hide everything by default */
+#product-management, #user-management, #supplier-management {
+    display: none; 
+}
+
+.show-section {
+    display: block !important;
+}
+
+.management-options button:hover {
+    cursor: pointer;
+    background-color: #F0D4B8;
+}
+
+.table-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.table-container.active {
+    top: 80px;
+}
+
+.heading {
+    display: flex;
+    justify-content:space-between;
+    align-items: baseline;
+    gap: 500px;
+}
+
+.heading h3 {font-size: 30px;}
+
+
