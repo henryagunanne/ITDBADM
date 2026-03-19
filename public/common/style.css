@@ -39,7 +39,22 @@ header nav {
     background-color:#3A5635;
     padding: 0 40px;
 }
-
+header nav select {
+    border: none !important;
+    border-radius: 20px !important;
+    padding: 6px 30px 6px 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #3A5635;
+    background-color: #F4E2D0;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%233A5635' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
 .nav-links, .nav-icons {
     display: flex;
     align-items: center;
@@ -895,4 +910,35 @@ table.viewrecords a.delete-link:hover {
 .tab-controls select:focus {
     outline: none;
     border-color: #5D372A;
+}
+
+/* SEARCH BAR */
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.search-input {
+    width: 0;
+    opacity: 0;
+    border: none;
+    border-bottom: 2px solid #F4E2D0;
+    background: transparent;
+    color: #F4E2D0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    padding: 4px 8px;
+    transition: width 0.3s ease, opacity 0.3s ease;
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: rgba(244, 226, 208, 0.6);
+}
+
+.search-input.active {
+    width: 180px;
+    opacity: 1;
 }

@@ -13,10 +13,15 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <img src="/itdbadm-mp/public/common/logo.png" class="logo" alt="Cool Beans Logo" />
 
     <div class="nav-icons">
-      <a href=""><img src="/itdbadm-mp/public/common/search.png" class="icons" /></a>
-      <a href="#"><img src="/itdbadm-mp/public/common/shopping-cart.png" class="cart-icon" /></a>
-      
-      <?php if ($is_logged_in): ?>
+    <div class="search-wrapper">
+        <input type="text" class="search-input" placeholder="Search beans...">
+        <a href="#" class="search-toggle">
+            <img src="/itdbadm-mp/public/common/search.png" class="icons" />
+        </a>
+    </div>
+    <a href="#"><img src="/itdbadm-mp/public/common/shopping-cart.png" class="cart-icon" /></a>
+    
+    <?php if ($is_logged_in): ?>
         <span><?= htmlspecialchars($_SESSION['username']) ?></span>
         <div class="user-dropdown">
             <a href="#"><img src="/itdbadm-mp/public/common/user.png" class="login-icon" /></a>
@@ -30,7 +35,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <?php else: ?>
         <a href="#"><img src="/itdbadm-mp/public/common/user.png" class="login-icon" /></a>
     <?php endif; ?>
-    </div>
+</div>
   </nav>
 </header>
 

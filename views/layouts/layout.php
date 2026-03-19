@@ -12,3 +12,33 @@
     <?= $body ?>
   </body>
 </html>
+
+<script>
+    // search toggle
+  const searchToggle = document.querySelector('.search-toggle');
+  const searchInput = document.querySelector('.search-input');
+
+  if (searchToggle && searchInput) {
+      searchToggle.onclick = (e) => {
+          e.preventDefault();
+          searchInput.classList.toggle('active');
+          if (searchInput.classList.contains('active')) {
+              searchInput.focus();
+          }
+      };
+
+      // close when clicking outside
+      window.addEventListener('click', (e) => {
+          if (!e.target.closest('.search-wrapper')) {
+              searchInput.classList.remove('active');
+          }
+      });
+
+      // search on enter
+      searchInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' && searchInput.value.trim()) {
+              window.location.href = `/itdbadm-mp/views/beans.php?search=${encodeURIComponent(searchInput.value.trim())}`;
+          }
+      });
+  }
+</script>
