@@ -31,8 +31,8 @@
                 <div class="qty-selector">
                     <button>-</button> <span>0</span> <button>+</button>
                 </div>
-                <button class="add-btn">Add to Cart</button>
-            </div>
+                <button class="add-btn" onclick="addToCart(<?= $selected['bean_id'] ?>)">Add to Cart</button>
+                </div>
         </div>
     </div>
 </div>
