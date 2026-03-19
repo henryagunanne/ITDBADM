@@ -73,7 +73,7 @@ if (!$supplier) {
             <p style="color: red; font-weight: 600;"><?= $error ?></p>
         <?php endif; ?>
 
-        <form method="POST" action="edit_supplier.php?id=<?= $supplier['supplier_id'] ?>">
+        <form method="POST" action="edit_suppliers.php?id=<?= $supplier['supplier_id'] ?>">
             <input type="hidden" name="supplier_id" value="<?= $supplier['supplier_id'] ?>">
 
             <div class="form-group">

@@ -18,9 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: ../management/management.php?tab=supplier-management');
         exit;
     } else {
-        // $error = 'Failed to add supplier.';
-        // $stmt->close();
-        $error = 'Failed to add supplier: ' . $stmt->error;
+        $error = 'Failed to add supplier.';
+        $stmt->close();
+        // $error = 'Failed to add supplier: ' . $stmt->error;
     }
 }
 ?>
