@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/db-connect.php';
+require_once '../coffee-backend/config/db-connect.php';
 
 // --- FETCH SELECTED BEAN ---
 $bean_id = $_GET['id'] ?? null;

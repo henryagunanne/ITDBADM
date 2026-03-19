@@ -1,9 +1,9 @@
 <header>
   <nav>
     <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/view/beans">Beans</a>
-      <a href="/">About Us</a>
+      <a href="../coffee-backend/index.php">Home</a>
+      <a href="/view/beans.php">Beans</a>
+      <a href="/view/about.php">About Us</a>
     </div>
     <img src="../public/common/logo.png" class="logo" alt="Cool Beans Logo" />
     <div class="nav-icons">

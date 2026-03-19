@@ -5,7 +5,7 @@
     <div class="product-items">
         <?php foreach ($beans as $bean): ?>
             <div class="bean-item">
-                <a href="/itdbadm-mp/views/view/beans/item.php?id=<?= $bean['bean_id'] ?>">
+                <a href="/itdbadm-mp/views/item.php?id=<?= $bean['bean_id'] ?>">
                     <h4><?= htmlspecialchars($bean['bean_name']) ?></h4>
                     <p>PHP <?= number_format($bean['price_per_kg'], 2) ?>/kg</p>
                     <img src="/itdbadm-mp/public/common/coffee-bag.png">
