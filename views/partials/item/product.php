@@ -1,6 +1,6 @@
 <div class="product-container">
     <div class="left-panel">
-        <img src="../public/common/coffee-bag.png">
+        <img src="/itdbadm-mp/public/common/coffee-bag.png">
     </div>
 
     <div class="right-panel">
@@ -15,7 +15,7 @@
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Origin Province:</td>
-                    <td><?= htmlspecialchars($selected['origin_province_id']) ?></td>
+                    <td><?= htmlspecialchars($selected['province_name']) ?></td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Roast Level:</td>

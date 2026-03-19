@@ -5,7 +5,7 @@ require_once '../config/db-connect.php';
 // --- FETCH SELECTED BEAN ---
 $bean_id = $_GET['id'] ?? null;
 if (!$bean_id) {
-    header('Location: /views/beans.php');
+    header('Location: /itdbadm-mp/views/beans.php');
     exit;
 }
 
@@ -20,17 +20,16 @@ $result = mysqli_stmt_get_result($stmt);
 $selected = mysqli_fetch_assoc($result);
 
 if (!$selected) {
-    header('Location: /views/beans.php');
+    header('Location: /itdbadm-mp/views/beans.php');
     exit;
 }
 
 // --- FETCH RELATED BEANS ---
-$bean_result = mysqli_query($conn, "SELECT bean_id, bean_name, price_per_kg, bean_image_path FROM coffee_bean LIMIT 4");
-$beansRaw = [];
+$bean_result = mysqli_query($conn, "SELECT bean_id, bean_name, price_per_kg FROM coffee_bean LIMIT 4");
+$beans = [];
 while ($row = mysqli_fetch_assoc($bean_result)) {
-    $beansRaw[] = $row;
+    $beans[] = $row;
 }
-$beans = $beansRaw;
 
 // --- CART ---
 $items = $_SESSION['cart'] ?? [];
@@ -47,5 +46,5 @@ include __DIR__ . '/partials/item/product_row.php';
 include __DIR__ . '/partials/footer.php';
 $body = ob_get_clean();
 
-include __DIR__ . 'views/layouts/layout.php';
+include __DIR__ . '/../views/layouts/layout.php';
 ?>

@@ -39,6 +39,7 @@ foreach ($items as $item) {
 ob_start();
 include '../views/partials/header.php';
 include '../views/partials/home/hero.php';
+include '../views/partials/home/home_beans.php';
 include '../views/partials/home/farmer_fact.php';
 include '../views/partials/home/home_testimonials.php';
 include '../views/partials/footer.php';
