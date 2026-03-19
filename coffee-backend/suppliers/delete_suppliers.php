@@ -1,23 +1,22 @@
 <?php
-session_start(); 
+session_start();
 include("../config/db-connect.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
-    $bean_id = $_GET['id'];
+    $supplier_id = $_GET['id'];
 
-    $query = "DELETE FROM coffee_bean WHERE bean_id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $bean_id);
+    $stmt = $conn->prepare("DELETE FROM supplier WHERE supplier_id = ?");
+    $stmt->bind_param("i", $supplier_id);
 
     if ($stmt->execute()) {
         $stmt->close();
         $conn->close();
-        header('Location: ../management/management.php?tab=product-management&msg=deleted');
+        header('Location: ../management/management.php?tab=supplier-management');
         exit;
     } else {
         $stmt->close();
         $conn->close();
-        header('Location: ../management/management.php?tab=product-management&msg=failed');
+        header('Location: ../management/management.php?tab=supplier-management&msg=failed');
         exit;
     }
 } else {
