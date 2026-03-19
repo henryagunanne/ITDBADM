@@ -41,12 +41,12 @@ header nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     width: 95%;
     height: 70px; 
     border-radius: 70px;
     background-color:#3A5635;
     padding: 0 40px;
+    position: relative; 
 }
 
 .nav-links, .nav-icons {
@@ -671,8 +671,6 @@ table.viewrecords a.delete-link:hover {
     color: #F4E2D0;
 }
 
-/* FORM STYLES - add these to the bottom of style_mgmt.css */
-
 .form-container {
     width: 90%;
     max-width: 520px;
@@ -750,4 +748,42 @@ table.viewrecords a.delete-link:hover {
     font-weight: 600;
     font-size: 14px;
     text-align: center;
+}
+.user-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+.user-dropdown span {
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+}
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    min-width: 150px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    z-index: 100;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    color: #333;
+    text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f5f5f5;
+}
+
+.user-dropdown:hover .dropdown-menu {
+    display: block;
 }

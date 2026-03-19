@@ -1,5 +1,5 @@
 <div class="login-container"> 
-    <form method="POST" action="login.php" id="login-form">
+    <form method="POST" action="/itdbadm-mp/coffee-backend/auth/login.php" id="login-form">
         <div class="login-content">
             <div class="email">
                 <input type="text" name="username" placeholder="Username">
@@ -24,13 +24,14 @@ document.getElementById('login-form').addEventListener('submit', async function(
 
     const formData = new FormData(this);
 
-    const res  = await fetch('login.php', { method: 'POST', body: formData });
+    const res = await fetch('/itdbadm-mp/coffee-backend/auth/login.php', { method: 'POST', body: formData });
     const data = await res.json();
-
+    // const text = await res.text(); // change json() to text() temporarily
+    // console.log(text); // see raw response
     if (data.success) {
-        if (data.role === 'ADMIN')       window.location.href = 'admin/management.php';
-        else if (data.role === 'STAFF')  window.location.href = 'staff/dashboard.php';
-        else                             window.location.href = 'customer/dashboard.php';
+        if (data.role === 'ADMIN')       window.location.href = '/itdbadm-mp/coffee-backend/management/management.php';
+        else if (data.role === 'STAFF') window.location.href = '/itdbadm-mp/coffee-backend/management/management.php';
+        else                             window.location.href = '/itdbadm-mp/coffee-backend/index.php';
     } else {
         document.getElementById('login-error').style.display = 'block';
         document.getElementById('login-error').textContent   = data.error;

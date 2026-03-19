@@ -28,24 +28,23 @@
             if (password_verify($password, $user['password'])) {
         
                 // store session data
-                $_SESSION['user_id'] = $user['user_id'];
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['role'] = $user['role'];
+                $_SESSION['user_id']       = $user['user_id'];
+                $_SESSION['username']      = $user['username'];
+                $_SESSION['role']          = $user['role'];
                 $_SESSION['linked_customer'] = $user['linked_customer_id'];
-                $_SESSION['linked_store'] = $user['linked_store_id'];
+                $_SESSION['linked_store']    = $user['linked_store_id'];
 
-            
                 // redirect based on role
-                $role = 'CUSTOMER';
-                if ($user['user_type'] === 'ADMIN') {
+                if ($user['role'] === 'ADMIN') {
                     $_SESSION['is_admin'] = true;
                     $role = 'ADMIN';
-                } elseif ($user['user_type'] === 'STAFF') {
+                } elseif ($user['role'] === 'STAFF') {
                     $_SESSION['is_staff'] = true;
                     $role = 'STAFF';
+                } else {
+                    $_SESSION['is_customer'] = true;
+                    $role = 'CUSTOMER';
                 }
-
-
 
                 echo json_encode([
                     'success' => "Login successful!",
@@ -58,7 +57,7 @@
         
             } else {
                 echo json_encode(['error' => "Incorrect password!"]);
-                //header("Location: login.php");
+                header("Location: login.php");
                 $stmt->close();
                 $conn->close();
                 exit;

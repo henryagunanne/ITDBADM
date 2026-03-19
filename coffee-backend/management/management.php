@@ -12,7 +12,12 @@
     session_start();
     require_once '../config/db-connect.php';
 
-    // bean sort + filter
+    //redirect if not admin
+    if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'ADMIN') {
+        header('Location: /itdbadm-mp/coffee-backend/index.php');
+        exit;
+    }
+
     $sort = $_GET['sort'] ?? 'A-Z';
     switch ($sort) {
         case 'Z-A':       $order = "cb.bean_name DESC"; break;
@@ -32,18 +37,15 @@
                    $filter_clause";
     $result_bean = mysqli_query($conn, $bean_query);
 
-    // user sort
     $user_sort  = $_GET['user_sort'] ?? 'A-Z';
     $user_order = $user_sort == 'Z-A' ? "username DESC" : "username ASC";
     $result_user = mysqli_query($conn, "SELECT * FROM users ORDER BY $user_order");
 
-    // supplier sort
     $supplier_sort  = $_GET['supplier_sort'] ?? 'A-Z';
     $supplier_order = $supplier_sort == 'Z-A' ? "supplier_name DESC" : "supplier_name ASC";
     $result_supplier = mysqli_query($conn, "SELECT * FROM supplier ORDER BY $supplier_order");
     $result_orderlogs = mysqli_query($conn, "SELECT * FROM sale_payment ORDER BY payment_date DESC");
 
-    // keep track of active tab after sort/filter
     $active_tab = $_GET['tab'] ?? 'product-management';
 ?>
 <!DOCTYPE html>
@@ -54,7 +56,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Notable&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="../../public/common/style_mgmt.css">
+        <link rel="stylesheet" href="/itdbadm-mp/public/common/style.css">
     </head>
     <body>
         <!-- NAVIGATION -->
@@ -64,8 +66,15 @@
                     <option>Manila Branch</option>
                     <option>Laguna Branch</option>
                 </select>
-                <img src="../../public/common/logo.png" class="logo" alt="Cool Beans Logo" />
-                <a href=""><img src="../../public/common/user.png" class="icons" /></a>
+                <img src="/itdbadm-mp/public/common/logo.png" class="logo" alt="Cool Beans Logo" />
+                <div class="user-dropdown">
+                    <span><?= htmlspecialchars($_SESSION['username']) ?></span>
+                    <a href="#"><img src="/itdbadm-mp/public/common/user.png" class="icons" /></a>
+                    <div class="dropdown-menu">
+                        <a href="/itdbadm-mp/coffee-backend/index.php">Home</a>
+                        <a href="/itdbadm-mp/coffee-backend/auth/logout.php">Logout</a>
+                    </div>
+                </div>
             </nav>
         </header>
 

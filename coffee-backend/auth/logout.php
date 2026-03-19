@@ -1,8 +1,7 @@
 <?php
-    // Tear down the session and send the user back to login.
     session_start();
     session_unset();
     session_destroy();
-    header("Location: ../pages/login.php"); // need to change
+    header('Location: /itdbadm-mp/coffee-backend/index.php');
     exit();
 ?>
