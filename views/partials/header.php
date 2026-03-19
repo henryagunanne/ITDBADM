@@ -2,8 +2,8 @@
   <nav>
     <div class="nav-links">
       <a href="../coffee-backend/index.php">Home</a>
-      <a href="/view/beans.php">Beans</a>
-      <a href="/view/about.php">About Us</a>
+      <a href="../views/beans.php">Beans</a>
+      <a href="../views/view/about.php">About Us</a>
     </div>
     <img src="../public/common/logo.png" class="logo" alt="Cool Beans Logo" />
     <div class="nav-icons">
