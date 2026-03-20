@@ -334,7 +334,7 @@
                         <th>Customer</th>
                         <th>Store</th>
                         <th>Sale Date</th>
-                        <th>Amount Paid</th>
+                        <th>Total Amount</th>
                         <th>Currency</th>
                         <th>Method</th>
                         <th>Status</th>
@@ -354,7 +354,7 @@
                             </td>
                             <td><?= htmlspecialchars($row['store_name']) ?></td>
                             <td><?= $row['sale_date'] ?></td>
-                            <td>P<?= number_format($row['amount_paid'], 2) ?></td>
+                            <td>P<?= number_format($row['amount_paid'] ?? $row['total_amount'] ?? 0, 2) ?></td>
                             <td><?= $row['currency_code'] ?></td>
                             <td><?= $row['payment_method'] ?></td>
                             <td>
@@ -374,6 +374,7 @@
                 </table>
             </div>
         </div>
+        
         <!-- ORDER MODAL -->
         <div id="order-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:2000; justify-content:center; align-items:center;">
             <div style="background:#fff8f3; border-radius:16px; padding:40px; width:600px; max-height:80vh; overflow-y:auto; position:relative;">
@@ -464,7 +465,8 @@
                         alert('Failed to update status.');
                     }
                 }
-                async function viewOrder(saleId) {
+
+            async function viewOrder(saleId) {
             const modal   = document.getElementById('order-modal');
             const content = document.getElementById('order-modal-content');
             modal.style.display = 'flex';
@@ -498,7 +500,7 @@
                     <tr><td style="font-weight:600; padding:4px 0; color:#3A5635;">Sale Date</td><td>${s.sale_date}</td></tr>
                     <tr><td style="font-weight:600; padding:4px 0; color:#3A5635;">Payment Method</td><td>${s.payment_method ?? 'N/A'}</td></tr>
                     <tr><td style="font-weight:600; padding:4px 0; color:#3A5635;">Payment Status</td><td>${s.payment_status ?? 'N/A'}</td></tr>
-                    <tr><td style="font-weight:600; padding:4px 0; color:#3A5635;">Amount Paid</td><td>${s.amount_paid ? 'P' + parseFloat(s.amount_paid).toFixed(2) : 'N/A'}</td></tr>
+                    <tr><td style="font-weight:600; padding:4px 0; color:#3A5635;">Total Amount</td><td>P${parseFloat(s.total_amount).toFixed(2)}</td></tr>
                 </table>
 
                 <h4 style="color:#5D372A; margin-bottom:10px;">Items Ordered</h4>
@@ -515,17 +517,40 @@
                         <td style="font-weight:bold;">P${parseFloat(s.total_amount).toFixed(2)}</td>
                     </tr>
                 </table>
+
+                <div style="margin-top:24px; text-align:right;">
+                    <button onclick="cancelOrder(${s.sale_id})"
+                        style="background-color:#EA672D; color:white; border:none; border-radius:20px; padding:10px 24px;
+                            font-family:Montserrat,sans-serif; font-weight:600; font-size:13px; cursor:pointer;">
+                        Cancel Order
+                    </button>
+                </div>
             `;
         }
 
         function closeOrderModal() {
             document.getElementById('order-modal').style.display = 'none';
         }
+                document.getElementById('order-modal').addEventListener('click', function(e) {
+                    if (e.target === this) closeOrderModal();
+                });
+                async function cancelOrder(saleId) {
+            if (!confirm('Are you sure you want to cancel this order? This cannot be undone.')) return;
 
-        // close modal when clicking outside
-        document.getElementById('order-modal').addEventListener('click', function(e) {
-            if (e.target === this) closeOrderModal();
-        });
+            const formData = new FormData();
+            formData.append('sale_id', saleId);
+
+            const res  = await fetch('../orders/cancel_order.php', { method: 'POST', body: formData });
+            const data = await res.json();
+
+            if (data.success) {
+                alert('Order cancelled successfully.');
+                closeOrderModal();
+                location.reload(); 
+            } else {
+                alert('Failed to cancel order: ' + data.message);
+            }
+        }
     </script>
 </html>
 <?php mysqli_close($conn); ?>
