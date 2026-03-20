@@ -1,5 +1,5 @@
 <footer>
-  <img src="../public/common/logo.png" />
+  <img src="/itdbadm-mp/public/common/logo.png" />
   
   <table>
     <tr>
@@ -14,154 +14,117 @@
 </footer>
 
 <script>
-    const showPopupCart = document.querySelector('.cart-icon');
-    const popupContainerCart = document.querySelector('.cart-container');
-    const showPopupLogin = document.querySelector('.login-icon');
-    const popupContainerLogin = document.querySelector('.login-container');
+const CART_URL = '/itdbadm-mp/coffee-backend/cart/update.php';
 
+// --- POPUPS ---
+const showPopupCart       = document.querySelector('.cart-icon');
+const popupContainerCart  = document.querySelector('.cart-container');
+const showPopupLogin      = document.querySelector('.login-icon');
+const popupContainerLogin = document.querySelector('.login-container');
+
+if (showPopupCart) {
     showPopupCart.onclick = (e) => {
         e.preventDefault();
-        popupContainerCart.classList.toggle('active'); 
+        popupContainerCart.classList.toggle('active');
     };
+}
 
+if (showPopupLogin) {
     showPopupLogin.onclick = (e) => {
         e.preventDefault();
-        popupContainerLogin.classList.toggle('active'); 
+        popupContainerLogin.classList.toggle('active');
     };
+}
 
-    window.onclick = (e) => {
-        if (!popupContainerCart.contains(e.target) && !showPopupCart.contains(e.target)) {
-            popupContainerCart.classList.remove('active');
-        }
-        else if (!popupContainerLogin.contains(e.target) && !showPopupLogin.contains(e.target)) {
-            popupContainerLogin.classList.remove('active');
-        }
-    };
-// QTY BUTTONS
-document.querySelectorAll('.qty-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
+window.onclick = (e) => {
+    if (popupContainerCart && showPopupCart &&
+        !popupContainerCart.contains(e.target) &&
+        !showPopupCart.contains(e.target)) {
+        popupContainerCart.classList.remove('active');
+    }
+    if (popupContainerLogin && showPopupLogin &&
+        !popupContainerLogin.contains(e.target) &&
+        !showPopupLogin.contains(e.target)) {
+        popupContainerLogin.classList.remove('active');
+    }
+};
+
+// --- QTY BUTTONS (product listing) ---
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('qty-btn')) {
         e.preventDefault();
-        const id      = this.dataset.id;
-        const display = document.getElementById('qty-' + id);
-        let qty       = parseInt(display.textContent);
-
-        if (this.classList.contains('plus')) {
-            qty++;
-        } else if (this.classList.contains('minus') && qty > 1) {
-            qty--;
-        }
-
-        display.textContent = qty;
-    });
+        e.stopPropagation();
+        const id    = e.target.dataset.id;
+        const span  = document.getElementById('qty-' + id);
+        if (!span) return;
+        let qty = parseInt(span.textContent);
+        if (e.target.classList.contains('plus')) qty++;
+        else if (e.target.classList.contains('minus') && qty > 1) qty--;
+        span.textContent = qty;
+    }
 });
 
-// ADD TO CART
-document.querySelectorAll('.add-btn').forEach(btn => {
-    btn.addEventListener('click', async function(e) {
-        e.preventDefault();
-        const id      = this.dataset.id;
-        const qty     = parseInt(document.getElementById('qty-' + id).textContent);
+// --- ADD TO CART ---
+async function addToCart(beanId) {
+    const span = document.getElementById('qty-' + beanId);
+    const qty  = span ? parseInt(span.textContent) : 1;
 
-        const formData = new FormData();
-        formData.append('action', 'add');
-        formData.append('bean_id', id);
-        formData.append('qty', qty);
+    const formData = new FormData();
+    formData.append('action', 'add');
+    formData.append('bean_id', beanId);
+    formData.append('qty', qty);
 
-        const res  = await fetch('/itdbadm-mp/coffee-backend/cart/update_cart.php', {
-            method: 'POST',
-            body: formData
-        });
-        const data = await res.json();
+    const res  = await fetch(CART_URL, { method: 'POST', body: formData });
+    const data = await res.json();
+    if (data.success) {
+        refreshCart();
 
-        if (data.success) {
-            updateCartUI(data);
-            // flash feedback
-            this.textContent = '✓ Added!';
-            setTimeout(() => this.textContent = 'Add to Cart', 1500);
+        // flash on add-btn
+        const btn = document.querySelector(`.add-btn[data-id="${beanId}"]`);
+        if (btn) {
+            btn.textContent = '✓ Added!';
+            setTimeout(() => btn.textContent = 'Add to Cart', 1500);
         }
-    });
-});
 
-  // UPDATE CART UI
-  function updateCartUI(data) {
-      // update cart items display
-      const cartContent = document.querySelector('.cart-content');
-      if (!cartContent) return;
+        // show notif on item page
+        const notif = document.getElementById('add-notif');
+        if (notif) {
+            notif.style.display = 'block';
+            setTimeout(() => notif.style.display = 'none', 2000);
+        }
+    }
+}
 
-      // rebuild cart items
-      let itemsHTML = '<h3>Your Cart</h3><hr>';
+// --- UPDATE QTY IN CART ---
+async function updateCart(beanId, qty) {
+    if (qty < 1) return;
+    const formData = new FormData();
+    formData.append('action', 'update');
+    formData.append('bean_id', beanId);
+    formData.append('qty', qty);
 
-      if (data.cart.length === 0) {
-          itemsHTML += '<p style="text-align:center; color:#888;">Your cart is empty.</p>';
-      } else {
-          data.cart.forEach(item => {
-              itemsHTML += `
-                  <div class="item">
-                      <img src="/itdbadm-mp/public/common/coffee-bag.png" class="cart-item-img" />
-                      <div class="cart-info">
-                          <h5>${item.bean.bean_name}</h5>
-                          <p class="price">PHP ${item.bean.price_per_kg}</p>
-                          <div class="qty-row">
-                              <span>Quantity:</span>
-                              <div class="qty-selector">
-                                  <button onclick="cartUpdate(${item.bean.bean_id}, ${item.quantity - 1})">-</button>
-                                  <span>${item.quantity}</span>
-                                  <button onclick="cartUpdate(${item.bean.bean_id}, ${item.quantity + 1})">+</button>
-                              </div>
-                          </div>
-                          <p class="item-total">Total: PHP ${(item.bean.price_per_kg * item.quantity).toFixed(2)}</p>
-                      </div>
-                      <button class="delete-btn" onclick="cartRemove(${item.bean.bean_id})">
-                          <img src="/itdbadm-mp/public/common/bin.png">
-                      </button>
-                  </div>
-              `;
-          });
-      }
+    const res  = await fetch(CART_URL, { method: 'POST', body: formData });
+    const data = await res.json();
+    if (data.success) refreshCart();
+}
 
-      itemsHTML += `
-          <div class="cart-footer">
-              <hr>
-              <div class="subtotal-row">
-                  <span class="label">Subtotal:</span>
-                  <span class="amount">PHP ${data.total}</span>
-              </div>
-              <button class="checkout-btn" onclick="location.href='/itdbadm-mp/views/checkout.php'">Checkout</button>
-          </div>
-      `;
+// --- REMOVE FROM CART ---
+async function removeFromCart(beanId) {
+    const formData = new FormData();
+    formData.append('action', 'remove');
+    formData.append('bean_id', beanId);
 
-      cartContent.innerHTML = itemsHTML;
-  }
+    const res  = await fetch(CART_URL, { method: 'POST', body: formData });
+    const data = await res.json();
+    if (data.success) refreshCart();
+}
 
-  // UPDATE QTY IN CART
-  async function cartUpdate(bean_id, qty) {
-      const formData = new FormData();
-      formData.append('action', 'update');
-      formData.append('bean_id', bean_id);
-      formData.append('qty', qty);
-
-      const res  = await fetch('/itdbadm-mp/coffee-backend/cart/update_cart.php', { method: 'POST', body: formData });
-      const data = await res.json();
-      if (data.success) updateCartUI(data);
-  }
-
-  // REMOVE FROM CART
-  async function cartRemove(bean_id) {
-      const formData = new FormData();
-      formData.append('action', 'remove');
-      formData.append('bean_id', bean_id);
-
-      const res  = await fetch('/itdbadm-mp/coffee-backend/cart/update_cart.php', { method: 'POST', body: formData });
-      const data = await res.json();
-      if (data.success) updateCartUI(data);
-  }    
-
-  // render cart from session data
+// --- REFRESH CART UI ---
 async function refreshCart() {
-    const res = await fetch('/itdbadm-mp/coffee-backend/cart/update.php', {
-        method: 'POST',
-        body: (() => { const f = new FormData(); f.append('action', 'get'); return f; })()
-    });
+    const formData = new FormData();
+    formData.append('action', 'get');
+
+    const res  = await fetch(CART_URL, { method: 'POST', body: formData });
     const data = await res.json();
     if (!data.success) return;
 
@@ -170,7 +133,8 @@ async function refreshCart() {
 
     if (data.cart.length === 0) {
         container.innerHTML = '<p style="text-align:center; color:#888;">Your cart is empty.</p>';
-        document.getElementById('cart-total').textContent = 'PHP 0.00';
+        const total = document.getElementById('cart-total');
+        if (total) total.textContent = 'PHP 0.00';
         return;
     }
 
@@ -179,67 +143,54 @@ async function refreshCart() {
             <img src="/itdbadm-mp/public/common/coffee-bag.png" class="cart-item-img" />
             <div class="cart-info">
                 <h5>${item.bean.bean_name}</h5>
-                <p class="price">PHP ${item.bean.price_per_kg}</p>
+                <p class="price">PHP ${parseFloat(item.bean.price_per_kg).toFixed(2)}</p>
                 <div class="qty-row">
                     <span>Quantity:</span>
                     <div class="qty-selector">
-                        <button onclick="updateCart(${item.bean.bean_id}, ${item.quantity - 1})">-</button>
+                        <button
+                            ${item.quantity <= 1
+                                ? 'disabled style="opacity:0.3; cursor:not-allowed;"'
+                                : `onclick='updateCart(${item.bean.bean_id}, ${item.quantity - 1})'`}>-</button>
                         <span>${item.quantity}</span>
-                        <button onclick="updateCart(${item.bean.bean_id}, ${item.quantity + 1})">+</button>
+                        <button onclick='updateCart(${item.bean.bean_id}, ${item.quantity + 1})'>+</button>
                     </div>
                 </div>
                 <p class="item-total">Total: PHP ${(item.bean.price_per_kg * item.quantity).toFixed(2)}</p>
             </div>
-            <button class="delete-btn" onclick="removeFromCart(${item.bean.bean_id})">
-                <img src="/itdbadm-mp/public/common/bin.png">
+            <button class='delete-btn' onclick='removeFromCart(${item.bean.bean_id})'>
+                <img src='/itdbadm-mp/public/common/bin.png'>
             </button>
         </div>
     `).join('');
 
-    document.getElementById('cart-total').textContent = 'PHP ' + data.total;
+    const total = document.getElementById('cart-total');
+    if (total) total.textContent = 'PHP ' + data.total;
 }
 
-async function addToCart(beanId, qty = 1) {
-    const formData = new FormData();
-    formData.append('action', 'add');
-    formData.append('bean_id', beanId);
-    formData.append('qty', qty);
+// --- SEARCH BAR ---
+const searchToggle = document.querySelector('.search-toggle');
+const searchInput  = document.querySelector('.search-input');
 
-    const res = await fetch('/itdbadm-mp/coffee-backend/cart/update.php', {
-        method: 'POST',
-        body: formData
+if (searchToggle && searchInput) {
+    searchToggle.onclick = (e) => {
+        e.preventDefault();
+        searchInput.classList.toggle('active');
+        if (searchInput.classList.contains('active')) searchInput.focus();
+    };
+
+    window.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-wrapper')) {
+            searchInput.classList.remove('active');
+        }
     });
-    const data = await res.json();
-    if (data.success) refreshCart();
-}
 
-async function updateCart(beanId, qty) {
-    const formData = new FormData();
-    formData.append('action', 'update');
-    formData.append('bean_id', beanId);
-    formData.append('qty', qty);
-
-    const res = await fetch('/itdbadm-mp/coffee-backend/cart/update.php', {
-        method: 'POST',
-        body: formData
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && searchInput.value.trim()) {
+            window.location.href = `/itdbadm-mp/views/beans.php?search=${encodeURIComponent(searchInput.value.trim())}`;
+        }
     });
-    const data = await res.json();
-    if (data.success) refreshCart();
 }
 
-async function removeFromCart(beanId) {
-    const formData = new FormData();
-    formData.append('action', 'remove');
-    formData.append('bean_id', beanId);
-
-    const res = await fetch('/itdbadm-mp/coffee-backend/cart/update.php', {
-        method: 'POST',
-        body: formData
-    });
-    const data = await res.json();
-    if (data.success) refreshCart();
-}
-
-// load cart on page load
+// --- LOAD CART ON PAGE LOAD ---
 document.addEventListener('DOMContentLoaded', refreshCart);
 </script>

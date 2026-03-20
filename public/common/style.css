@@ -942,3 +942,9 @@ table.viewrecords a.delete-link:hover {
     width: 180px;
     opacity: 1;
 }
+
+.bean-link {
+    cursor: pointer;
+    text-decoration: none;
+    color: #5D372A;
+}

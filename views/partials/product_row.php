@@ -2,16 +2,18 @@
 <div class="product-row">
     <div class="product-items">
         <?php foreach ($row as $bean): ?>
-            <div class="bean-item" onclick="window.location.href='/view/beans/<?= $bean['bean_id'] ?>'">
+            <div class="bean-item" onclick="window.location.href='/itdbadm-mp/views/item.php?id=<?= $bean['bean_id'] ?>'">
                 <h4><?= htmlspecialchars($bean['bean_name']) ?></h4>
                 <p>PHP <?= htmlspecialchars($bean['price_per_kg']) ?>/kg</p>
-                <img src="<?= htmlspecialchars($bean['bean_image_path'] ?? '') ?>">
+                <img src="/itdbadm-mp/public/common/coffee-bag.png">
                 
-                <div class="controls">
+                <div class="controls" onclick="event.stopPropagation()">
                     <div class="qty-selector">
-                        <button>-</button> <span>0</span> <button>+</button>
+                        <button onclick="changeQty(this, -1)">-</button>
+                        <span>1</span>
+                        <button onclick="changeQty(this, 1)">+</button>
                     </div>
-                    <button class="add-btn">Add to Cart</button>
+                    <button class="add-btn" onclick="addToCart(<?= $bean['bean_id'] ?>, getQty(this))">Add to Cart</button>
                 </div>
             </div>
         <?php endforeach; ?>
