@@ -70,7 +70,38 @@
     $supplier_order = $supplier_sort == 'Z-A' ? "supplier_name DESC" : "supplier_name ASC";
     $result_supplier = mysqli_query($conn, "SELECT * FROM supplier WHERE 1=1 $supplier_search_clause ORDER BY $supplier_order");
 
-    $result_orderlogs = mysqli_query($conn, "SELECT * FROM sale_payment ORDER BY payment_date DESC");
+    // --- ORDER LOGS ---
+    $order_sort   = $_GET['order_sort'] ?? 'newest';
+    $order_status = $_GET['order_status'] ?? 'all';
+
+    $order_where = "WHERE 1=1";
+    if ($order_status !== 'all') {
+        $order_status_escaped = mysqli_real_escape_string($conn, $order_status);
+        $order_where .= " AND sp.payment_status = '$order_status_escaped'";
+    }
+
+    $order_clause = $order_sort == 'oldest' ? "ORDER BY sp.payment_date ASC" : "ORDER BY sp.payment_date DESC";
+
+        $result_orderlogs = mysqli_query($conn, "
+            SELECT 
+                sp.payment_id,
+                sp.sale_id,
+                sp.payment_date,
+                sp.amount_paid,
+                sp.currency_code,
+                sp.payment_method,
+                sp.payment_status,
+                CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
+                c.email,
+                st.store_name,
+                s.sale_date
+            FROM sale_payment sp
+            JOIN sale s ON sp.sale_id = s.sale_id
+            JOIN customer c ON s.customer_id = c.customer_id
+            JOIN store st ON s.store_id = st.store_id
+            $order_where
+            $order_clause
+    ");
 
     // keep track of active tab after sort/filter
     $active_tab = $_GET['tab'] ?? 'product-management';
@@ -280,34 +311,75 @@
 
             <!-- ORDER MANAGEMENT -->
             <div id="order-management" class="order-management">
+                <div class="tab-controls">
+                    <form method="GET" action="management.php" style="display:inline-flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                        <input type="hidden" name="tab" value="order-management">
+                        <label>Status:</label>
+                        <select name="order_status" onchange="this.form.submit()">
+                            <option value="all"     <?= ($order_status ?? 'all') == 'all'     ? 'selected' : '' ?>>All</option>
+                            <option value="PENDING" <?= ($order_status ?? '') == 'PENDING'    ? 'selected' : '' ?>>Pending</option>
+                            <option value="PAID"    <?= ($order_status ?? '') == 'PAID'       ? 'selected' : '' ?>>Paid</option>
+                            <option value="FAILED"  <?= ($order_status ?? '') == 'FAILED'     ? 'selected' : '' ?>>Failed</option>
+                        </select>
+                        <label>Sort By:</label>
+                        <select name="order_sort" onchange="this.form.submit()">
+                            <option value="newest" <?= ($order_sort ?? 'newest') == 'newest' ? 'selected' : '' ?>>Newest First</option>
+                            <option value="oldest" <?= ($order_sort ?? '') == 'oldest'       ? 'selected' : '' ?>>Oldest First</option>
+                        </select>
+                    </form>
+                </div>
                 <table class="viewrecords">
                     <tr>
                         <th>Payment ID</th>
-                        <th>Sale ID</th>
-                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Store</th>
+                        <th>Sale Date</th>
                         <th>Amount Paid</th>
                         <th>Currency</th>
                         <th>Method</th>
                         <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                     <?php if (mysqli_num_rows($result_orderlogs) == 0): ?>
                         <tr>
-                            <td colspan="7" style="text-align:center; padding:30px; color:#888;">No orders yet.</td>
+                            <td colspan="9" style="text-align:center; padding:30px; color:#888;">No orders yet.</td>
                         </tr>
                     <?php else: ?>
                         <?php while ($row = mysqli_fetch_assoc($result_orderlogs)): ?>
                         <tr>
                             <td><?= $row['payment_id'] ?></td>
-                            <td><?= $row['sale_id'] ?></td>
-                            <td><?= $row['payment_date'] ?></td>
+                            <td>
+                                <strong><?= htmlspecialchars($row['customer_name']) ?></strong><br>
+                                <small><?= htmlspecialchars($row['email']) ?></small>
+                            </td>
+                            <td><?= htmlspecialchars($row['store_name']) ?></td>
+                            <td><?= $row['sale_date'] ?></td>
                             <td>P<?= number_format($row['amount_paid'], 2) ?></td>
                             <td><?= $row['currency_code'] ?></td>
                             <td><?= $row['payment_method'] ?></td>
-                            <td><?= $row['payment_status'] ?></td>
+                            <td>
+                                <?php $status = $row['payment_status'] ?? 'UNKNOWN'; ?>
+                                <span class="status-badge status-<?= strtolower($status) ?>"
+                                    data-id="<?= $row['payment_id'] ?>"
+                                    onclick="cycleStatus(this)">
+                                    <?= $status ?>
+                                </span>
+                            </td>
+                            <td>
+                                <a href="#" onclick="viewOrder(<?= $row['sale_id'] ?>); return false;">View</a>
+                            </td>
                         </tr>
                         <?php endwhile; ?>
                     <?php endif; ?>
                 </table>
+            </div>
+        </div>
+        <!-- ORDER MODAL -->
+        <div id="order-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:2000; justify-content:center; align-items:center;">
+            <div style="background:#fff8f3; border-radius:16px; padding:40px; width:600px; max-height:80vh; overflow-y:auto; position:relative;">
+                <button onclick="closeOrderModal()" style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:20px; cursor:pointer; color:#5D372A;">✕</button>
+                <h3 style="color:#5D372A; font-family:Notable,sans-serif; margin-bottom:20px;">Order Details</h3>
+                <div id="order-modal-content">Loading...</div>
             </div>
         </div>
     </body>
@@ -334,7 +406,12 @@
         navButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const targetId = this.getAttribute('data-target');
-                if (targetId) showTab(targetId);
+                if (targetId) {
+                    document.querySelectorAll('.tab-controls input[type="text"]').forEach(input => {
+                        input.value = '';
+                    });
+                    showTab(targetId);
+                }
             });
         });
 
@@ -344,18 +421,111 @@
             showTab(activeTab);
         });
 
-        navButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const targetId = this.getAttribute('data-target');
-            if (targetId) {
-                // clear all search inputs when switching tabs
-                document.querySelectorAll('.tab-controls input[type="text"]').forEach(input => {
-                    input.value = '';
+        // UPDATE ORDER STATUS
+        document.querySelectorAll('.status-select').forEach(select => {
+            select.addEventListener('change', async function() {
+                const paymentId = this.dataset.id;
+                const status    = this.value;
+
+                const formData = new FormData();
+                formData.append('payment_id', paymentId);
+                formData.append('status', status);
+
+                const res  = await fetch('../orders/update_status.php', {
+                    method: 'POST',
+                    body: formData
                 });
-                showTab(targetId);
-            }
+                const data = await res.json();
+
+                if (data.success) {
+                    this.style.borderColor = status == 'PAID' ? '#3A5635' : status == 'FAILED' ? '#EA672D' : '#888';
+                    this.style.color       = status == 'PAID' ? '#3A5635' : status == 'FAILED' ? '#EA672D' : '#888';
+                } else {
+                    alert('Failed to update status.');
+                }
+            });
         });
-    });
+                    async function cycleStatus(badge) {
+                    const order = ['PENDING', 'PAID', 'FAILED'];
+                    const current = badge.textContent.trim();
+                    const next = order[(order.indexOf(current) + 1) % order.length];
+
+                    const formData = new FormData();
+                    formData.append('payment_id', badge.dataset.id);
+                    formData.append('status', next);
+
+                    const res  = await fetch('../orders/update_status.php', { method: 'POST', body: formData });
+                    const data = await res.json();
+
+                    if (data.success) {
+                        badge.textContent = next;
+                        badge.className = `status-badge status-${next.toLowerCase()}`;
+                    } else {
+                        alert('Failed to update status.');
+                    }
+                }
+                async function viewOrder(saleId) {
+            const modal   = document.getElementById('order-modal');
+            const content = document.getElementById('order-modal-content');
+            modal.style.display = 'flex';
+            content.innerHTML   = 'Loading...';
+
+            const res  = await fetch(`../orders/get_order.php?sale_id=${saleId}`);
+            const data = await res.json();
+
+            if (!data.success) {
+                content.innerHTML = 'Failed to load order.';
+                return;
+            }
+
+            const s = data.sale;
+            const itemsHTML = data.items.map(item => `
+                <tr>
+                    <td>${item.bean_name}</td>
+                    <td>${item.quantity} kg</td>
+                    <td>P${parseFloat(item.unit_price).toFixed(2)}</td>
+                    <td>P${parseFloat(item.subtotal).toFixed(2)}</td>
+                </tr>
+            `).join('');
+
+            content.innerHTML = `
+                <table style="width:100%; border-spacing:0; margin-bottom:20px;">
+                    <tr><td style="font-weight:600; padding:4px 0; color:#3A5635;">Customer</td><td>${s.customer_name}</td></tr>
+                    <tr><td style="font-weight:600; padding:4px 0; color:#3A5635;">Email</td><td>${s.email}</td></tr>
+                    <tr><td style="font-weight:600; padding:4px 0; color:#3A5635;">Contact</td><td>${s.contact_number}</td></tr>
+                    <tr><td style="font-weight:600; padding:4px 0; color:#3A5635;">Address</td><td>${s.address}</td></tr>
+                    <tr><td style="font-weight:600; padding:4px 0; color:#3A5635;">Store</td><td>${s.store_name}</td></tr>
+                    <tr><td style="font-weight:600; padding:4px 0; color:#3A5635;">Sale Date</td><td>${s.sale_date}</td></tr>
+                    <tr><td style="font-weight:600; padding:4px 0; color:#3A5635;">Payment Method</td><td>${s.payment_method ?? 'N/A'}</td></tr>
+                    <tr><td style="font-weight:600; padding:4px 0; color:#3A5635;">Payment Status</td><td>${s.payment_status ?? 'N/A'}</td></tr>
+                    <tr><td style="font-weight:600; padding:4px 0; color:#3A5635;">Amount Paid</td><td>${s.amount_paid ? 'P' + parseFloat(s.amount_paid).toFixed(2) : 'N/A'}</td></tr>
+                </table>
+
+                <h4 style="color:#5D372A; margin-bottom:10px;">Items Ordered</h4>
+                <table class="viewrecords">
+                    <tr>
+                        <th>Bean</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Subtotal</th>
+                    </tr>
+                    ${itemsHTML}
+                    <tr>
+                        <td colspan="3" style="font-weight:bold; text-align:right;">Total:</td>
+                        <td style="font-weight:bold;">P${parseFloat(s.total_amount).toFixed(2)}</td>
+                    </tr>
+                </table>
+            `;
+        }
+
+        function closeOrderModal() {
+            document.getElementById('order-modal').style.display = 'none';
+        }
+
+        // close modal when clicking outside
+        document.getElementById('order-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeOrderModal();
+        });
     </script>
 </html>
 <?php mysqli_close($conn); ?>
