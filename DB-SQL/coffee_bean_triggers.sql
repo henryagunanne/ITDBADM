@@ -45,3 +45,41 @@ BEGIN
 END
 
 $$ DELIMITER ;
+
+
+-- ---------------------------------------
+-- Prevent negative inventory on UPDATE
+-- ---------------------------------------
+DELIMITER $$
+
+CREATE TRIGGER before_inventory_update
+BEFORE UPDATE ON store_inventory
+FOR EACH ROW
+BEGIN
+    IF NEW.quantity_kg < 0 THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Inventory cannot be negative.';
+    END IF;
+END 
+
+$$ DELIMITER ;
+
+
+-- ---------------------------------------
+-- Prevent negative inventory on INSERT
+-- ---------------------------------------
+DELIMITER $$
+
+CREATE TRIGGER before_inventory_insert
+BEFORE INSERT ON store_inventory
+FOR EACH ROW
+BEGIN
+    IF NEW.quantity_kg < 0 THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Inventory cannot be negative.';
+    END IF;
+END 
+
+$$ DELIMITER ;
+
+

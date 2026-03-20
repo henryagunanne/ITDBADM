@@ -69,9 +69,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sale_id = $conn->insert_id;
         $stmt3->close();
 
-        // insert sale items
-        foreach ($cartItems as $bean_id => $item) {
-            $quantity = $item['quantity'];
+            // Create sale items
+            foreach ($cartItems as $bean_id => $item) {
+                $quantity = $item['quantity'];
+
+                // Check if quantity is less than or equal to available inventory 
+                
 
             // get price
             $priceStmt = $conn->prepare("SELECT price_per_kg FROM coffee_bean WHERE bean_id = ?");

@@ -67,7 +67,7 @@ ENGINE = InnoDB;
 -- Table `cool_beans`.`supplier`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cool_beans`.`supplier` (
-  `supplier_id` INT NOT NULL,
+  `supplier_id` INT NOT NULL AUTO_INCREMENT,
   `supplier_name` VARCHAR(100) NOT NULL,
   `contact_number` VARCHAR(45) NOT NULL,
   `email` VARCHAR(100) NOT NULL,

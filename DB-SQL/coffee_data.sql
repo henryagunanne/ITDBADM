@@ -165,11 +165,11 @@ INSERT INTO store VALUES
 -- > randomly generated
 -- ----------------------------------------
 INSERT INTO supplier VALUES
-(1, "Nathaniel Isidro", "09826587073", "nathanielisidro@gmail.com", "Phase 3 B F Homes 308 Aguirre Avenue 1700", 70),
-(2, "South Farms", "026965544", "SouthFarms@yahoo.com", "Sitio Lugusangan, Barangay Mantalongon", 39),
+(1, "Nathaniel Isidro", "09826587073", "nathanielisidro@gmail.com", "Phase 3 B F Homes 308 Aguirre Avenue 1700", 19),
+(2, "South Farms", "026965544", "SouthFarms@yahoo.com", "Sitio Lugusangan, Barangay Mantalongon", 15),
 (3, "Leon Arabejo", "09464376275", "Leon_Arabejo@gmail.com", "Cavite Economic Zone, Rosario", 18),
-(4, "Sakahang SK", "020375202", "SakahangSK@yahoo.com", "1244 Sitio Kapehan, Barangay Kanipaan", 62),
-(5, "Felippe Vargas", "09240068561", "f.vargas@gmail.com", "Sitio El Dulo, Barangay Edwards", 61);
+(4, "Sakahang SK", "020375202", "SakahangSK@yahoo.com", "1244 Sitio Kapehan, Barangay Kanipaan", 13),
+(5, "Felippe Vargas", "09240068561", "f.vargas@gmail.com", "Sitio El Dulo, Barangay Edwards", 3);
 
 
 -- ---------------------------------------
@@ -227,8 +227,7 @@ INSERT INTO store_inventory (store_id, bean_id, quantity_kg) VALUES
 (1, 1, 45), (1, 2, 30), (1, 3, 22), (1, 5, 60), (1, 8, 15),
 (2, 1, 35), (2, 4, 4), (2, 6, 12), (2, 7, 50),
 (3, 2, 3), (3, 3, 18), (3, 5, 40), (3, 6, 8),
-(4, 1, 25), (4, 5, 55), (4, 7, 3), (4, 8, 35);
-
+(1, 1, 25), (2, 5, 55), (2, 7, 3), (3, 8, 35);
 
 -- Sample Sales
 INSERT INTO sale (store_id, customer_id, sale_date, total_amount) VALUES
