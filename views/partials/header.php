@@ -7,7 +7,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <div class="nav-links">
       <a href="/itdbadm-mp/coffee-backend/index.php">Home</a>
       <a href="/itdbadm-mp/views/beans.php">Beans</a>
-      <a href="/">About Us</a>
+      <a href="/itdbadm-mp/views/about.php">About Us</a>
     </div>
 
     <img src="/itdbadm-mp/public/common/logo.png" class="logo" alt="Cool Beans Logo" />

@@ -2,8 +2,21 @@
 session_start();
 require_once '../coffee-backend/config/db-connect.php';
 
-// --- CART ITEMS (from session) ---
+// // redirect if not logged in
+// if (!isset($_SESSION['user_id'])) {
+//     header('Location: /itdbadm-mp/coffee-backend/index.php');
+//     exit;
+// }
+
+// --- CART ITEMS ---
 $items = $_SESSION['cart'] ?? [];
+
+// redirect if cart is empty
+if (empty($items)) {
+    header('Location: /itdbadm-mp/views/beans.php');
+    exit;
+}
+
 $total_price = 0;
 foreach ($items as $item) {
     $total_price += $item['bean']['price_per_kg'] * $item['quantity'];
@@ -23,9 +36,8 @@ while ($row = mysqli_fetch_assoc($city_result)) {
     $cities[] = $row;
 }
 
-// --- CART ---
 $location = 'Home > Checkout';
-$title = 'Checkout';
+$title    = 'Checkout';
 
 ob_start();
 include __DIR__ . '/partials/header.php';
@@ -34,5 +46,5 @@ include __DIR__ . '/partials/checkout/checkout_container.php';
 include __DIR__ . '/partials/footer.php';
 $body = ob_get_clean();
 
-include __DIR__ . '/../views/layouts/layout.php';
+include __DIR__ . '/layouts/layout.php';
 ?>

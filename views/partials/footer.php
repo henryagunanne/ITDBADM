@@ -3,12 +3,12 @@
   
   <table>
     <tr>
-      <td><a href="">About Us</a></td>
-      <td><a href="">Terms & Conditions</a></td>
+      <td><a href="/itdbadm-mp/views/about.php">About Us</a></td>
+      <td><a href="/itdbadm-mp/views/terms.php">Terms & Conditions</a></td>
     </tr>
     <tr>
-      <td><a href="">Contact Us</a></td>
-      <td><a href="">How to Order</a></td>
+      <td><a href="/itdbadm-mp/views/contact.php">Contact Us</a></td>
+      <td><a href="/itdbadm-mp/views/how-to-order.php">How to Order</a></td>
     </tr>
   </table>
 </footer>
@@ -190,7 +190,82 @@ if (searchToggle && searchInput) {
         }
     });
 }
+// --- CHECKOUT FORM ---
+// --- CHECKOUT FORM ---
+const checkoutForm = document.getElementById('checkout-form');
+if (checkoutForm) {
 
+    // show/hide card details based on payment method
+    const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
+    const cardDetails   = document.getElementById('card-details');
+
+    paymentRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.value === 'CARD') {
+                cardDetails.classList.add('active');
+            } else {
+                cardDetails.classList.remove('active');
+            }
+        });
+    });
+
+    // form validation + submit
+    checkoutForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // reset errors
+        document.querySelectorAll('.checkout-error').forEach(el => el.classList.remove('active'));
+
+        let valid = true;
+
+        // email
+        const email = this.querySelector('[name="email"]').value.trim();
+        if (!email) {
+            document.getElementById('err-email').classList.add('active');
+            valid = false;
+        }
+
+        // first name
+        const firstName = this.querySelector('[name="first_name"]').value.trim();
+        if (!firstName) {
+            document.getElementById('err-name').classList.add('active');
+            valid = false;
+        }
+
+        // card details if CARD selected
+        const selectedPayment = this.querySelector('input[name="payment_method"]:checked')?.value;
+        if (selectedPayment === 'CARD') {
+            const cardNumber = document.getElementById('card_number').value.trim();
+            const expiry     = document.getElementById('expiry').value.trim();
+            const cardHolder = document.getElementById('card_holder').value.trim();
+            const cvv        = document.getElementById('cvv').value.trim();
+
+            if (!cardNumber || !expiry || !cardHolder || !cvv) {
+                document.getElementById('err-card').classList.add('active');
+                valid = false;
+            }
+        }
+
+        if (!valid) return;
+
+        // submit
+        const formData = new FormData(this);
+        const res  = await fetch('/itdbadm-mp/coffee-backend/checkout/process_sale.php', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            alert('Order placed successfully!');
+            window.location.href = '/itdbadm-mp/coffee-backend/index.php';
+        } else {
+            const errGeneral = document.getElementById('err-general');
+            errGeneral.textContent = data.message;
+            errGeneral.classList.add('active');
+        }
+    });
+}
 // --- LOAD CART ON PAGE LOAD ---
 document.addEventListener('DOMContentLoaded', refreshCart);
 </script>
