@@ -193,8 +193,8 @@ INSERT INTO coffee_bean VALUES
 -- > randomly generated
 -- ----------------------------------------
 INSERT INTO customer VALUES
-(1, "Julia", "Castro", "juliacastro@gmail.com", "09467259175", "No. 56 Aragon St., SFDM", 28),
-(2, "Sklar", "Arancel", "sky.arancel@gmail.com", "09348592572", "Riverbanks Center, A. Bonifacio Avenue", 20),
+(1, "Carlo", "Rivera", "carlorivera@gmail.com", "09467259175", "No. 56 Aragon St., SFDM", 28),
+(2, "Sofia", "Arancel", "sofia.arancel@gmail.com", "09348592572", "Riverbanks Center, A. Bonifacio Avenue", 20),
 (3, "Ansley", "Chua", "ansleychu@yahoo.com", "09127342953", "Basement, Shangri-La Plaza, EDSA Corner Shaw Boulevard", 17);
 
 
