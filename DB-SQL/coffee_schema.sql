@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `cool_beans`.`region` (
   `region_id` INT NOT NULL AUTO_INCREMENT,
   `region_name` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`region_id`),
-  UNIQUE INDEX `region_id_UNIQUE` (`region_id` ASC) VISIBLE)
+  UNIQUE INDEX `region_id_UNIQUE` (`region_id` ASC))
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `cool_beans`.`currency` (
   `currency_name` VARCHAR(45) NULL,
   `symbol` VARCHAR(5) NULL,
   PRIMARY KEY (`currency_code`),
-  UNIQUE INDEX `currency_code_UNIQUE` (`currency_code` ASC) VISIBLE)
+  UNIQUE INDEX `currency_code_UNIQUE` (`currency_code` ASC))
 ENGINE = InnoDB;
 
 
@@ -459,3 +459,18 @@ CREATE TABLE `cool_beans`.`coffee_bean_update_log` (
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- ====================================
+-- Order History Log Table
+-- ====================================
+CREATE TABLE `cool_beans`.`order_history_log` (
+    `log_id`         INT AUTO_INCREMENT PRIMARY KEY,
+    `sale_id`        INT NOT NULL,
+    `customer_id`    INT NOT NULL,
+    `store_name`     VARCHAR(100) NOT NULL,
+    `sale_date`      DATE,
+    `total_amount`   DECIMAL(18,2),
+    `currency_code`  VARCHAR(5),
+    `payment_method` ENUM('CASH', 'CARD', 'BANK TRANSFER', 'CHEQUE'),
+    `logged_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
