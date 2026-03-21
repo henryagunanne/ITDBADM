@@ -1,4 +1,4 @@
-
+USE cool_beans;
 -- -------------------------------------
 --  Coffee bean Delete log
 -- -------------------------------------
@@ -82,4 +82,35 @@ END
 
 $$ DELIMITER ;
 
-
+-- -------------------------------------
+--  Order History Log
+-- -------------------------------------
+DELIMITER //
+CREATE TRIGGER after_payment_completed
+AFTER UPDATE ON sale_payment
+FOR EACH ROW
+BEGIN
+    IF NEW.payment_status = 'PAID' AND OLD.payment_status != 'PAID' THEN
+        INSERT INTO order_history_log (
+            sale_id,
+            customer_id,
+            store_name,
+            sale_date,
+            total_amount,
+            currency_code,
+            payment_method
+        )
+        SELECT
+            s.sale_id,
+            s.customer_id,
+            st.store_name,
+            s.sale_date,
+            s.total_amount,
+            NEW.currency_code,
+            NEW.payment_method
+        FROM sale s
+        JOIN store st ON s.store_id = st.store_id
+        WHERE s.sale_id = NEW.sale_id;
+    END IF;
+END
+// DELIMITER ;
