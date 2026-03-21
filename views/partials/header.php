@@ -29,6 +29,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
                 <?php if ($is_admin): ?>
                     <a href="/itdbadm-mp/coffee-backend/management/management.php">Management</a>
                 <?php endif; ?>
+                <a href="/itdbadm-mp/coffee-backend/user-profile/customer_profile.php">View Profile</a>
                 <a href="/itdbadm-mp/coffee-backend/auth/logout.php">Logout</a>
             </div>
         </div>
