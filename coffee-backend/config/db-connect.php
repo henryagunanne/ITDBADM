@@ -1,13 +1,13 @@
 <?php
     // Database credentials
-    $host = "10.2.0.17"; // VM IP
-    $port = 22017;
+    $host = "localhost"; // VM IP
+    $port = 3306;
     $database = "cool_beans";
-    $username = "root";
-    $password = "RqxWHOg1ZJfY";
+    $username = "student1";
+    $password = "Dlsu1234!";
 
     // Create connection
-    $conn = new mysqli($host, $username, $password, $database);
+    $conn = new mysqli($host, $username, $password, $database, $port);
 
     // Check connection
     if ($conn->connect_error) {
