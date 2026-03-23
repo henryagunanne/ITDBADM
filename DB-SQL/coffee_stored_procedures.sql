@@ -75,7 +75,7 @@ END;
 
 
 -- ---------------------------------------
--- [DOUBLE CHECK] Add item to cart
+-- Add item to cart
 -- ---------------------------------------
 DELIMITER //
 CREATE PROCEDURE addToCart (
@@ -190,3 +190,74 @@ BEGIN
 END;
 // DELIMITER ;
 
+
+
+-- ---------------------------------------
+-- Register a new customer + user account
+-- ---------------------------------------
+DELIMITER //
+CREATE PROCEDURE registerCustomer (
+    IN in_first_name      VARCHAR(100),
+    IN in_last_name       VARCHAR(100),
+    IN in_email           VARCHAR(100),
+    IN in_contact_number  VARCHAR(45),
+    IN in_address         VARCHAR(150),
+    IN in_city_id         INT,
+    IN in_username        VARCHAR(50),
+    IN in_password        VARCHAR(255)
+)
+BEGIN
+    DECLARE v_customer_id INT;
+
+    INSERT INTO customer (first_name, last_name, email, contact_number, address, city_id)
+    VALUES (in_first_name, in_last_name, in_email, in_contact_number, in_address, in_city_id);
+
+    SET v_customer_id = LAST_INSERT_ID();
+
+    INSERT INTO users (username, password, role, linked_customer_id, is_active, created_at)
+    VALUES (in_username, in_password, 'customer', v_customer_id, 1, NOW());
+END;
+// DELIMITER ;
+
+
+
+-- ---------------------------------------
+-- Add a new coffee bean
+-- ---------------------------------------
+DELIMITER //
+CREATE PROCEDURE addCoffeeBean (
+    IN in_bean_name          VARCHAR(100),
+    IN in_variety            VARCHAR(100),
+    IN in_origin_province_id INT,
+    IN in_roast_level        ENUM('Light','Medium','Dark'),
+    IN in_price_per_kg       DECIMAL(10,2),
+    IN in_supplier_id        INT,
+    IN in_description        TEXT
+)
+BEGIN
+    INSERT INTO coffee_bean (
+        bean_name, variety, origin_province_id,
+        roast_level, price_per_kg, supplier_id, description
+    )
+    VALUES (
+        in_bean_name, in_variety, in_origin_province_id,
+        in_roast_level, in_price_per_kg, in_supplier_id, in_description
+    );
+END;
+// DELIMITER ;
+
+
+-- ---------------------------------------
+-- Update coffee bean price
+-- ---------------------------------------
+DELIMITER //
+CREATE PROCEDURE updateBeanPrice (
+    IN in_bean_id      INT,
+    IN in_new_price    DECIMAL(10,2)
+)
+BEGIN
+    UPDATE coffee_bean
+    SET price_per_kg = in_new_price
+    WHERE bean_id = in_bean_id;
+END;
+// DELIMITER ;
