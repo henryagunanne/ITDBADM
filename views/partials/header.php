@@ -1,6 +1,7 @@
 <?php
 $is_logged_in = isset($_SESSION['user_id']);
 $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
+$is_staff = isset($_SESSION['role']) && $_SESSION['role'] === 'STAFF';
 ?>
 <header>
   <nav>
@@ -28,6 +29,9 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             <div class="dropdown-menu">
                 <?php if ($is_admin): ?>
                     <a href="/itdbadm-mp/coffee-backend/management/management.php">Management</a>
+                <?php endif; ?>
+                <?php if ($is_staff): ?>
+                    <a href="/itdbadm-mp/coffee-backend/staff/staff.php">Staff Dashboard</a>
                 <?php endif; ?>
                 <a href="/itdbadm-mp/coffee-backend/user-profile/customer_profile.php">View Profile</a>
                 <a href="/itdbadm-mp/coffee-backend/auth/logout.php">Logout</a>

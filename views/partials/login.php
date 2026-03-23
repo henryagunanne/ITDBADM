@@ -30,7 +30,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
     // console.log(text); // see raw response
     if (data.success) {
         if (data.role === 'ADMIN')       window.location.href = '/itdbadm-mp/coffee-backend/management/management.php';
-        else if (data.role === 'STAFF') window.location.href = '/itdbadm-mp/coffee-backend/management/management.php';
+        else if (data.role === 'STAFF') window.location.href = '/itdbadm-mp/coffee-backend/staff/staff.php';
         else                             window.location.href = '/itdbadm-mp/coffee-backend/index.php';
     } else {
         document.getElementById('login-error').style.display = 'block';
