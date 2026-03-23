@@ -474,3 +474,11 @@ CREATE TABLE `cool_beans`.`order_history_log` (
     `payment_method` ENUM('CASH', 'CARD', 'BANK TRANSFER', 'CHEQUE'),
     `logged_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
+
+
+-- ====================================
+-- Create Admin User
+-- ====================================
+CREATE USER 'Admin'@'%' IDENTIFIED BY 'Dlsu1234!';
+GRANT ALL PRIVILEGES ON cool_beans.* TO 'Admin'@'%';
+FLUSH PRIVILEGES;
