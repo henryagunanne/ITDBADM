@@ -1,6 +1,7 @@
 <?php
     // Database credentials
-    $host = "10.2.0.17:22017"; // VM IP
+    $host = "10.2.0.17"; // VM IP
+    $port = 22017;
     $database = "cool_beans";
     $username = "root";
     $password = "RqxWHOg1ZJfY";
