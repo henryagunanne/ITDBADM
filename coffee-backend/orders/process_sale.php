@@ -59,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $total     = 0;
 
     try {
+        $conn->query("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
         $conn->begin_transaction();
 
         // insert sale
@@ -69,11 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sale_id = $conn->insert_id;
         $stmt3->close();
 
-            // Create sale items
-            foreach ($cartItems as $bean_id => $item) {
-                $quantity = $item['quantity'];
-
-                // Check if quantity is less than or equal to available inventory 
+        // Create sale items
+        foreach ($cartItems as $bean_id => $item) {
+            $quantity = $item['quantity'];
                 
 
             // get price
@@ -88,6 +87,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $total      += $subtotal;
             $priceStmt->close();
 
+    
+            // lock row for update
+            $lockStmt = $conn->prepare("
+                SELECT quantity_kg 
+                FROM store_inventory 
+                WHERE bean_bean_id = ? AND store_id = ?
+                FOR UPDATE
+            ");
+
+            if (!$lockStmt) throw new Exception("Prepare failed: " . $conn->error);
+
+            $lockStmt->bind_param("ii", $bean_id, $store_id);
+            $lockStmt->execute();
+
+            $result = $lockStmt->get_result();
+            $row = $result->fetch_assoc();
+
+            if (!$row) {
+                throw new Exception("Inventory not found");
+            }
+
+            $current_stock = $row['quantity_kg'];
+            $lockStmt->close();
+
+            // Check if quantity is less than or equal to available inventory 
+            if ($current_stock < $quantity) {
+                throw new Exception("Not enough stock for bean ID: $bean_id");
+            }
+
+            // update inventory
+            $invStmt = $conn->prepare("UPDATE store_inventory 
+                                       SET quantity_kg = quantity_kg - ? 
+                                       WHERE bean_id = ? AND store_id = ?");
+
+            if (!$invStmt) throw new Exception("Prepare failed: " . $conn->error);
+
+            $invStmt->bind_param('iii', $quantity, $bean_id, $store_id);
+
+            if (!$invStmt->execute()) throw new Exception("Execute failed: " . $invStmt->error);
+
+            $invStmt->close();
+
+
             // insert sale item
             $itemStmt = $conn->prepare("INSERT INTO sale_items 
                                         (sale_id, bean_id, quantity, unit_price, subtotal)
@@ -96,15 +138,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $itemStmt->bind_param('iiidd', $sale_id, $bean_id, $quantity, $unit_price, $subtotal);
             if (!$itemStmt->execute()) throw new Exception("Execute failed: " . $itemStmt->error);
             $itemStmt->close();
-
-            // update inventory
-            $invStmt = $conn->prepare("UPDATE store_inventory 
-                                       SET quantity_kg = quantity_kg - ? 
-                                       WHERE bean_id = ? AND store_id = ?");
-            if (!$invStmt) throw new Exception("Prepare failed: " . $conn->error);
-            $invStmt->bind_param('iii', $quantity, $bean_id, $store_id);
-            if (!$invStmt->execute()) throw new Exception("Execute failed: " . $invStmt->error);
-            $invStmt->close();
         }
 
         // update sale total
