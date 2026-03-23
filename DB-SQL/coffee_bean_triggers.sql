@@ -114,3 +114,101 @@ BEGIN
     END IF;
 END
 // DELIMITER ;
+
+-- -------------------------------------
+--  Prevent duplicate coffee beans (same name + origin)
+-- -------------------------------------
+DELIMITER //
+CREATE TRIGGER before_coffee_bean_insert
+BEFORE INSERT ON coffee_bean
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM coffee_bean
+        WHERE bean_name = NEW.bean_name
+          AND origin_province_id = NEW.origin_province_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Duplicate coffee bean from same province is not allowed.';
+    END IF;
+END;
+// DELIMITER ;
+
+
+-- -------------------------------------
+--  Auto update inventory after sale
+-- -------------------------------------
+DELIMITER //
+CREATE TRIGGER after_sale_items_insert
+AFTER INSERT ON sale_items
+FOR EACH ROW
+BEGIN
+    UPDATE store_inventory
+    SET quantity_kg = quantity_kg - NEW.quantity
+    WHERE store_id = (SELECT store_id FROM sale WHERE sale_id = NEW.sale_id)
+      AND bean_id = NEW.bean_id;
+END;
+// DELIMITER ;
+
+
+-- -------------------------------------
+--  Auto increase inventory after restock
+-- -------------------------------------
+DELIMITER //
+CREATE TRIGGER after_restock_items_insert
+AFTER INSERT ON restock_items
+FOR EACH ROW
+BEGIN
+    UPDATE store_inventory
+    SET quantity_kg = quantity_kg + NEW.quantity
+    WHERE store_id = (SELECT store_id FROM restock WHERE restock_id = NEW.restock_id)
+      AND bean_id = NEW.bean_id;
+END;
+// DELIMITER ;
+
+
+
+-- -------------------------------------
+--  Prevent overpayment (sale)
+-- -------------------------------------
+DELIMITER //
+CREATE TRIGGER before_sale_payment_insert
+BEFORE INSERT ON sale_payment
+FOR EACH ROW
+BEGIN
+    DECLARE total DECIMAL(18,2);
+
+    SELECT total_amount INTO total
+    FROM sale
+    WHERE sale_id = NEW.sale_id;
+
+    IF NEW.amount_paid > total THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Payment exceeds total sale amount.';
+    END IF;
+END;
+// DELIMITER ;
+
+
+
+-- -------------------------------------
+--  Auto update payment status
+-- -------------------------------------
+DELIMITER //
+CREATE TRIGGER after_sale_payment_insert
+AFTER INSERT ON sale_payment
+FOR EACH ROW
+BEGIN
+    IF NEW.amount_paid >= (
+        SELECT total_amount FROM sale WHERE sale_id = NEW.sale_id
+    ) THEN
+        UPDATE sale_payment
+        SET payment_status = 'PAID'
+        WHERE payment_id = NEW.payment_id;
+    END IF;
+END;
+// DELIMITER ;
+
+
+SHOW TRIGGERS;

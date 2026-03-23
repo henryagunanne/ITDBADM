@@ -12,7 +12,7 @@ BEGIN
 	DECLARE rate DECIMAL(18,6);
     SELECT er.exchange_rate INTO rate
     FROM exchange_rate er
-    WHERE currency_code = from_currency_code AND converted_code = to_currency_code;
+    WHERE er.from_currency_code = currency_code  AND er.to_currency_code = converted_code;
     SET newAmount = amount * rate;
 END;
 // DELIMITER ;
@@ -119,4 +119,74 @@ BEGIN
 END; 
 // DELIMITER ;
 
- 
+
+
+-- ---------------------------------------
+-- Checkout procedure
+-- ---------------------------------------
+DELIMITER //
+CREATE PROCEDURE checkoutSale (
+    IN in_sale_id INT,
+    IN in_payment_method VARCHAR(20)
+)
+BEGIN
+    INSERT INTO sale_payment (
+        sale_id, payment_date, amount_paid, currency_code, payment_method, payment_status
+    )
+    SELECT 
+        sale_id, CURDATE(), total_amount, currency_code, in_payment_method, 'PAID'
+    FROM sale
+    WHERE sale_id = in_sale_id;
+END;
+// DELIMITER ;
+
+
+-- ---------------------------------------
+-- Get total sales per store
+-- ---------------------------------------
+DELIMITER //
+CREATE PROCEDURE getStoreSales (
+    IN in_store_id INT
+)
+BEGIN
+    SELECT store_id, SUM(total_amount) AS total_sales
+    FROM sale
+    WHERE store_id = in_store_id
+    GROUP BY store_id;
+END;
+// DELIMITER ;
+
+
+
+-- ---------------------------------------
+-- Restock procedure (header + items)
+-- ---------------------------------------
+DELIMITER //
+CREATE PROCEDURE createRestock (
+    IN in_store_id INT,
+    IN in_supplier_id INT,
+    IN in_currency VARCHAR(5)
+)
+BEGIN
+    INSERT INTO restock (store_id, supplier_id, restock_date, currency_code, total_amount)
+    VALUES (in_store_id, in_supplier_id, CURDATE(), in_currency, 0.00);
+END;
+// DELIMITER ;
+
+
+
+-- ---------------------------------------
+-- Get inventory per store
+-- ---------------------------------------
+DELIMITER //
+CREATE PROCEDURE getStoreInventory (
+    IN in_store_id INT
+)
+BEGIN
+    SELECT si.store_id, cb.bean_name, si.quantity_kg
+    FROM store_inventory si
+    JOIN coffee_bean cb ON si.bean_bean_id = cb.bean_id
+    WHERE si.store_id = in_store_id;
+END;
+// DELIMITER ;
+
