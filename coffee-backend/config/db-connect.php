@@ -3,7 +3,7 @@
     $host = "ccscloud.dlsu.edu.ph"; // VM IP
     $port = 22017;
     $database = "cool_beans";
-    $username = "student1";
+    $username = "Admin";
     $password = "Dlsu1234!";
 
     $conn = new mysqli($host, $username, $password, $database, $port);
