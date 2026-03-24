@@ -162,7 +162,7 @@ BEGIN
     UPDATE store_inventory
     SET quantity_kg = quantity_kg + NEW.quantity
     WHERE store_id = (SELECT store_id FROM restock WHERE restock_id = NEW.restock_id)
-      AND bean_id = NEW.bean_id;
+    AND bean_id = NEW.bean_id;
 END;
 // DELIMITER ;
 
@@ -178,7 +178,7 @@ FOR EACH ROW
 BEGIN
     DECLARE total DECIMAL(18,2);
 
-    SELECT total_amount INTO total
+    SELECT COALESCE(total_amount, 0) INTO total
     FROM sale
     WHERE sale_id = NEW.sale_id;
 

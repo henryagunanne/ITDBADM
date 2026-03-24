@@ -29,11 +29,11 @@ while ($row = mysqli_fetch_assoc($store_result)) {
     $stores[] = $row;
 }
 
-// --- FETCH CITIES ---
-$city_result = mysqli_query($conn, "SELECT city_id, city_name FROM city");
-$cities = [];
-while ($row = mysqli_fetch_assoc($city_result)) {
-    $cities[] = $row;
+// --- FETCH PROVINCES ---
+$prov_result = mysqli_query($conn, "SELECT province_id, province_name FROM province");
+$provinces = [];
+while ($row = mysqli_fetch_assoc($prov_result)) {
+    $provinces[] = $row;
 }
 
 $location = 'Home > Checkout';

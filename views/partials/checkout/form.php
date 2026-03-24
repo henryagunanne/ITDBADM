@@ -1,4 +1,4 @@
-<form method="POST" action="/itdbadm-mp/coffee-backend/checkout/process_sale.php" id="checkout-form">
+<form method="POST" action="/itdbadm-mp/coffee-backend/orders/process_sale.php" id="checkout-form">
     <div class="contact-info">
         <div class="email">
             <label>Email Address</label>
@@ -33,9 +33,9 @@
             <div class="address-line2">
                 <input type="number" name="postal_code" placeholder="Postal Code">
                 <select name="city_id">
-                    <?php foreach ($cities as $city): ?>
-                        <option value="<?= htmlspecialchars($city['city_id']) ?>">
-                            <?= htmlspecialchars($city['city_name']) ?>
+                    <?php foreach ($provinces as $prov): ?>
+                        <option value="<?= htmlspecialchars($prov['province_id']) ?>">
+                            <?= htmlspecialchars($prov['province_name']) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
