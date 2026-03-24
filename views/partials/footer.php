@@ -250,7 +250,7 @@ if (checkoutForm) {
 
         // submit
         const formData = new FormData(this);
-        const res  = await fetch('/itdbadm-mp/coffee-backend/checkout/process_sale.php', {
+        const res  = await fetch('/itdbadm-mp/coffee-backend/orders/process_sale.php', {
             method: 'POST',
             body: formData
         });
