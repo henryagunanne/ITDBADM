@@ -135,19 +135,18 @@ BEGIN
 END;
 // DELIMITER ;
 
-
 -- -------------------------------------
---  Auto update inventory after sale
+--  Ensures that every supplier inserted has a properly formatted email.
 -- -------------------------------------
 DELIMITER //
-CREATE TRIGGER after_sale_items_insert
-AFTER INSERT ON sale_items
+CREATE TRIGGER before_supplier_insert
+BEFORE INSERT ON supplier
 FOR EACH ROW
 BEGIN
-    UPDATE store_inventory
-    SET quantity_kg = quantity_kg - NEW.quantity
-    WHERE store_id = (SELECT store_id FROM sale WHERE sale_id = NEW.sale_id)
-      AND bean_id = NEW.bean_id;
+    IF NEW.email NOT LIKE '%@%.%' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Invalid email format for supplier.';
+    END IF;
 END;
 // DELIMITER ;
 
