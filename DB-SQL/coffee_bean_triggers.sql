@@ -189,25 +189,4 @@ BEGIN
 END;
 // DELIMITER ;
 
-
-
--- -------------------------------------
---  Auto update payment status
--- -------------------------------------
-DELIMITER //
-CREATE TRIGGER after_sale_payment_insert
-AFTER INSERT ON sale_payment
-FOR EACH ROW
-BEGIN
-    IF NEW.amount_paid >= (
-        SELECT total_amount FROM sale WHERE sale_id = NEW.sale_id
-    ) THEN
-        UPDATE sale_payment
-        SET payment_status = 'PAID'
-        WHERE payment_id = NEW.payment_id;
-    END IF;
-END;
-// DELIMITER ;
-
-
 SHOW TRIGGERS;
