@@ -44,7 +44,7 @@ $is_staff = isset($_SESSION['role']) && $_SESSION['role'] === 'STAFF';
   </nav>
 </header>
 
-<?php include __DIR__ . '\cart.php'; ?>
+<?php include __DIR__ . '/cart.php'; ?>
 <?php if (!$is_logged_in): ?>
-  <?php include __DIR__ . '\login.php'; ?>
+  <?php include __DIR__ . '/login.php'; ?>
 <?php endif; ?>
